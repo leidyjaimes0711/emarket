@@ -1,0 +1,128 @@
+/* Estilo del body para ocupar el 100% del alto */
+body{
+    height: 100%;
+    margin-top: 100px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f1f1f1; /* Fondo gris*/
+    color: black; /* Texto blanco */
+    display: grid;
+    width: 100%;
+}
+
+/* Estilo del contenedor principal para que ocupe toda la pantalla */
+.body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%; /* Aseguramos que ocupe el 100% del alto */
+    padding: 20px;
+}
+
+/* Sección del buscador */
+.search-section {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    background-color: white; /* Fondo blanco para el buscador */
+    color: #000; /* Texto en negro */
+}
+
+/* Sección de categorías */
+.categories-section {
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+}
+
+.categories {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.category {
+    background-color: #ff3b30; /* Rojo principal */
+    padding: 15px;
+    border-radius: 5px;
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+}
+
+.category:hover {
+    background-color: #b3241c; /* Rojo más oscuro al hacer hover */
+}
+
+/* Sección de recomendaciones */
+.recommendations-section {
+    width: 100%;
+    max-width: 1000px;
+    display: grid;
+}
+
+
+/*Grilla de los productos aleatorios*/
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 20px;
+    justify-items: center;
+}
+
+
+/* Diseño de las tarjetas de producto */
+.product-card {
+    background-color: #ffcc00; /* Amarillo dorado */
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 250px; /* Ancho máximo de cada tarjeta */
+    width: 200px; /* Ancho fijo para las tarjetas */
+}
+
+/*imagen de la tarjeta del producto*/
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/*color Nombre del producto*/
+.product-card h3 {
+    color: #ff3b30; /* Rojo principal */
+    margin-bottom: 5px;
+}
+
+/*color precio del producto*/
+.product-card p {
+    color: #000;
+    font-weight: bold;
+}
+
+
+
+/*media queries*/
+@media (max-width: 768px) {
+    .categories {
+        flex-direction: column;
+    }
+
+    .product-recommendations {
+        flex-direction: column;
+    }
+
+    .product-card {
+        width: 100%;
+    }
+}

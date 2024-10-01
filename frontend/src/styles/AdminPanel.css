@@ -1,0 +1,50 @@
+.admin-panel-unavailable {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f1f1f1; /* Fondo gris claro */
+    border-radius: 10px;
+    text-align: center;
+    color: #333;
+}
+
+.admin-panel-unavailable h2 {
+    color: #ff3b30; /* Rojo principal */
+}
+
+.admin-panel {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f1f1f1; /* Fondo gris claro */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-panel h2 {
+    color: #1d3557; /* Azul oscuro */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.admin-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.admin-btn {
+    background-color: #ff3b30; /* Rojo principal */
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-btn:hover {
+    background-color: #b3241c; /* Rojo más oscuro en hover */
+}

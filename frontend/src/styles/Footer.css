@@ -1,0 +1,17 @@
+.footer {
+    background-color: #1e1e1e; /* Fondo negro casi negro */
+    color: #ffffff; /* Texto blanco */
+    text-align: center;
+    padding: 20px;
+}
+
+.footer__social a {
+    color: #ffcc00; /* Enlaces en amarillo dorado */
+    margin: 0 10px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer__social a:hover {
+    color: #ff3b30; /* Cambia a rojo en hover */
+}

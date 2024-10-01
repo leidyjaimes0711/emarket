@@ -1,0 +1,46 @@
+.header {
+    width: 100%;
+    position: fixed; /* Fijo en la parte superior */
+    top: 0;
+    left: 0;
+    height: 80px;
+    background-color: #1e1e1e; /* Negro casi negro */
+    color: #ffffff; /* Texto blanco */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.header__logo {
+    display: flex;
+    align-items: center;
+}
+
+.header__logo img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.header__nav .btn {
+    background-color: #ff3b30; /* Rojo principal */
+    color: #ffffff; /* Texto blanco */
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.header__nav .btn:hover {
+    background-color: #b3241c; /* Un rojo más oscuro para hover */
+}
+
+/* Ajuste del espacio entre los botones */
+.header__nav {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap; /* Permite que los botones se ajusten a nuevas líneas si es necesario */
+
+}
