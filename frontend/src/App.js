@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 import Body from './components/Body';
 import AdminPanel from "./components/AdminPanel";  // El panel de administración
 import './App.css';
-import ProductForm from "./components/ProductForm";
+import AddProduct from "./components/AddProduct";
 
 let basePackages;
 
@@ -22,7 +22,7 @@ function App() {
                     <Route path="/admin" element={<AdminPanel />} /> {/* Ruta para el panel de administración */}
                 </Routes>
 
-                <ProductForm />
+                <AddProduct />
                 <Footer />
             </div>
         </Router>

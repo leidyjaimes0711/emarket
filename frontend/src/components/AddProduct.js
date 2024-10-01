@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import '../styles/ProductForm.css';
 import axios from 'axios'; // Usaremos Axios para hacer las solicitudes HTTP
 
-const ProductForm = ({ onAddProduct }) => {
+const AddProduct = ({ onAddProduct }) => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
@@ -85,4 +85,4 @@ const ProductForm = ({ onAddProduct }) => {
     );
 };
 
-export default ProductForm;
+export default AddProduct;
