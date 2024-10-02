@@ -5,7 +5,6 @@ import com.emarket.emarket.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 @Service
 public class ProductService {
 
@@ -17,12 +16,14 @@ public class ProductService {
     }
 
     public Product saveProduct(String name, String description, MultipartFile image) {
+        // Guardar la imagen en algún lugar (sistema de archivos o base de datos)
         String imageUrl = "";
 
-       Product product = new Product( 3 , "habitacion gold", "cama doble, 1 baño, nevera, aire acondicionado", "");
-
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setImageUrl(imageUrl);
 
         return productRepository.save(product);
-        
     }
 }

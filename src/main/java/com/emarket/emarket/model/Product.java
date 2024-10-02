@@ -26,6 +26,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public Product() {
+
+    }
+
     public Integer getId() {
         return id;
     }

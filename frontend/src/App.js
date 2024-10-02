@@ -4,7 +4,8 @@ import Footer from './components/Footer';
 import Body from './components/Body';
 import AdminPanel from "./components/AdminPanel";  // El panel de administración
 import './App.css';
-import AddProduct from "./components/AddProduct";
+import AddProduct from "./components/AddProduct.js";
+import {useState} from "react";
 
 let basePackages;
 
@@ -20,7 +21,6 @@ function App() {
                     <Route path="/" element={<Body products={products} />} /> {/* Página principal */}
                     <Route path="/admin" element={<AdminPanel />} /> {/* Ruta para el panel de administración */}
                 </Routes>
-
                 <AddProduct />
                 <Footer />
             </div>
