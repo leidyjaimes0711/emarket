@@ -1,87 +1,69 @@
-//contiene el formulario para agregar nuevos productos
 import React, { useState } from 'react';
-import '../styles/ProductForm.css';
-import axios from 'axios'; // Usaremos Axios para hacer las solicitudes HTTP
+import '../styles/AddProduct.css';
 
-const AddProduct = ({ onAddProduct }) => {
+const AddProduct = ({ onProductAdded }) => {
     const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!name || !price || !description || !image) {
-            alert('Por favor, completa todos los campos.');
+        // Validar que los campos no estén vacíos
+        if (!name || !description || !image) {
+            setError('Todos los campos son obligatorios');
             return;
         }
 
-        // Creamos un objeto de producto con los datos del formulario
-        const newProduct = {
-            name,
-            price,
-            description,
-            imageUrl: URL.createObjectURL(image) // Usamos una URL temporal para la imagen
-        };
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('image', image);
 
         try {
-            // Enviar el producto al backend
-            const response = await axios.post('http://localhost:8080/api/products', newProduct);
-            console.log('Producto guardado:', response.data);
+            const response = await fetch('http://localhost:8080/api/products', {
+                method: 'POST',
+                body: formData,
+            });
 
-            // Limpiar el formulario
-            setName('');
-            setPrice('');
-            setDescription('');
-            setImage(null);
-
-            // Actualizar la lista de productos
-            onAddProduct(response.data);
+            if (response.ok) {
+                alert('Producto agregado con éxito');
+                setName('');
+                setDescription('');
+                setImage(null);
+                setError('');
+                onProductAdded();  // Notifica al componente padre para actualizar la lista de productos
+            } else {
+                const result = await response.json();
+                setError(result.message);
+            }
         } catch (error) {
-            console.error('Error al registrar el producto:', error);
+            setError('Ocurrió un error al agregar el producto');
         }
     };
 
     return (
-        <div className="product-form-container">
-            <h2>Registrar nuevo producto</h2>
-            <form onSubmit={handleSubmit} className="product-form">
-                <label htmlFor="name">Nombre del producto:</label>
-                <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
-
-                <label htmlFor="price">Precio:</label>
-                <input
-                    type="number"
-                    id="price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                />
-
-                <label htmlFor="description">Descripción:</label>
-                <textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
-
-                <label htmlFor="image">Imagen del producto:</label>
-                <input
-                    type="file"
-                    id="image"
-                    onChange={(e) => setImage(e.target.files[0])}
-                />
-
-                <button type="submit" className="btn-submit">
-                    Agregar producto
-                </button>
-            </form>
-        </div>
+        <form className="add-product-form" onSubmit={handleSubmit}>
+            <h2>Agregar Producto</h2>
+            {error && <p className="error-message">{error}</p>}
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nombre del producto"
+            />
+            <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Descripción del producto"
+            />
+            <input
+                type="file"
+                onChange={(e) => setImage(e.target.files[0])}
+            />
+            <button type="submit">Agregar producto</button>
+        </form>
     );
 };
 

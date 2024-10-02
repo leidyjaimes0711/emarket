@@ -1,6 +1,7 @@
 package com.emarket.emarket;
 
 
+import org.hibernate.annotations.SourceType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -14,7 +15,5 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 public class EmarketApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EmarketApplication.class, args);
+
     }
-}
