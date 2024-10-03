@@ -50,12 +50,12 @@ const Body = () => {
 
             <section className="recommendations-section">
                 <h2>Productos Recomendados</h2>
-                <div className="product-grid">
-                    {products.map((product) => (
-                        <div key={product.id} className="product-card">
-                            <img src={product.image} alt={product.name}/>
-                            <h3>{product.name}</h3>
-                            <p>{product.price}</p>
+                <div className="room-grid">
+                    {products.map((room) => (
+                        <div key={room.id} className="room-card">
+                            <img src={room.image} alt={room.name}/>
+                            <h3>{room.name}</h3>
+                            <p>{room.price}</p>
                         </div>
                     ))}
                 </div>

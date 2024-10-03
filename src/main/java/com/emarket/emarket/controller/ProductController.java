@@ -1,7 +1,7 @@
 package com.emarket.emarket.controller;
 
-import com.emarket.emarket.model.Product;
-import com.emarket.emarket.service.ProductService;
+import com.emarket.emarket.model.Room;
+import com.emarket.emarket.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private RoomService roomService;
 
     @PostMapping
     public ResponseEntity<?> createProduct(
@@ -22,13 +22,7 @@ public class ProductController {
             @RequestParam("description") String description,
             @RequestParam("image") MultipartFile image) {
 
-        // Validar si el nombre ya existe
-        if (productService.existsByName(name)) {
-            return ResponseEntity.badRequest().body(Map.of("message", "El nombre del producto ya está en uso"));
-        }
 
-        // Guardar el producto
-        Product product = productService.saveProduct(name, description, image);
-        return ResponseEntity.ok(product);
+        return null;
     }
 }

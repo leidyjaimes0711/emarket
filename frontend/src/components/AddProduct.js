@@ -44,7 +44,7 @@ const AddProduct = ({ onProductAdded }) => {
     };
 
     return (
-        <form className="add-product-form" onSubmit={handleSubmit}>
+        <form className="add-room-form" onSubmit={handleSubmit}>
             <h2>Agregar Producto</h2>
             {error && <p className="error-message">{error}</p>}
             <input

@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Product {
+public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +19,14 @@ public class Product {
     // Getters y setters...
 
 
-    public Product(Integer id, String name, String description, String imageUrl) {
+    public Room(Integer id, String name, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
     }
 
-    public Product() {
+    public Room() {
 
     }
 
