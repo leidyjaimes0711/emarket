@@ -6,21 +6,22 @@ import AdminPanel from "./components/AdminPanel.js";  // El panel de administrac
 import './App.css';
 import AddProduct from "./components/AddProduct.js";
 import {useState} from "react";
+import React from 'react';
 
-
-function App() {
-    const [products, setProducts] = useState([]);
+function App() {const [products, setProducts] = useState([]);
 
     return (
-
-            <div className="App">
+        <Router>
+            <div className="app">
                 <Header />
-                <Body />
-                <AddProduct />
-                <AdminPanel />
+                <Routes>
+                    <Route path="/" element={<Body />} />
+                    <Route path="/admin" element={<AdminPanel />} />
+                    <Route path="/add-product" element={<AddProduct />} />
+                </Routes>
                 <Footer />
             </div>
-
+        </Router>
     );
 }
 

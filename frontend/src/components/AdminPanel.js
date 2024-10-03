@@ -1,44 +1,24 @@
-import React, { useEffect, useState } from 'react';
 import '../styles/AdminPanel.css';
+import {useNavigate } from 'react-router-dom';
+import React from 'react';
 
 const AdminPanel = () => {
-    const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-        // Detectar si la pantalla es menor a 768px (típico de móviles)
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
 
-        // Ejecutar la función al cargar la página
-        handleResize();
+    const history = useNavigate ();
 
-        // Agregar un listener para detectar cambios de tamaño en la ventana
-        window.addEventListener('resize', handleResize);
-
-        // Limpiar el listener cuando el componente se desmonte
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-
-    if (isMobile) {
-        return (
-            <div className="admin-panel-unavailable">
-                <h2>Panel de administración no disponible en dispositivos móviles</h2>
-                <p>Accede desde un dispositivo con una pantalla más grande.</p>
-            </div>
-        );
-    }
+    const goToSection = (section) => {
+        history.push(`/admin/${section}`);
+    };
 
     return (
         <div className="admin-panel">
             <h2>Panel de Administración</h2>
             <div className="admin-options">
-                <button className="admin-btn">Gestión de Productos</button>
-                <button className="admin-btn">Gestión de Usuarios</button>
-                <button className="admin-btn">Revisar Ventas</button>
-                <button className="admin-btn">Configuración General</button>
+                <button onClick={() => goToSection('hotels')}>Gestionar Hoteles</button>
+                <button onClick={() => goToSection('rooms')}>Gestionar Habitaciones</button>
+                <button onClick={() => goToSection('reservations')}>Gestionar Reservas</button>
+                <button onClick={() => goToSection('users')}>Gestionar Usuarios</button>
             </div>
         </div>
     );
