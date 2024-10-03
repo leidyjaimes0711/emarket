@@ -41,6 +41,5 @@
 .header__nav {
     display: flex;
     gap: 30px;
-    flex-wrap: wrap; /* Permite que los botones se ajusten a nuevas líneas si es necesario */
 
 }

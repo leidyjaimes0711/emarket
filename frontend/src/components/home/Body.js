@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../styles/Body.css';
+import '../../styles/Body.css';
 
 const Body = () => {
     const [products, setProducts] = useState([]);
