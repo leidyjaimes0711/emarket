@@ -91,6 +91,7 @@ public class RoomDao implements IDao<Room>{
             e.printStackTrace();
         } finally {
             try{
+                assert connection != null;
                 connection.close();
             }catch (Exception e){
                 e.printStackTrace();
@@ -137,6 +138,7 @@ public class RoomDao implements IDao<Room>{
             e.printStackTrace();
         } finally {
             try{
+                assert connection != null;
                 connection.close();
             }catch (Exception e){
                 e.printStackTrace();
