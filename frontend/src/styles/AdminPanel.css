@@ -31,6 +31,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    background-color: grey;
 }
 
 .admin-btn {
@@ -47,4 +48,9 @@
 
 .admin-btn:hover {
     background-color: #b3241c; /* Rojo más oscuro en hover */
+}
+
+
+.body-admin-options{
+    background-color: coral;
 }
