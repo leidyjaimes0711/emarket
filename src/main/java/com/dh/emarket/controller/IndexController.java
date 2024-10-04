@@ -1,5 +1,4 @@
 package com.dh.emarket.controller;
-
 import com.dh.emarket.model.Room;
 import com.dh.emarket.service.RoomService;
 import org.springframework.stereotype.Controller;
@@ -12,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/index")
 public class IndexController {
 
+    //atributo______________________________________________________
     private final RoomService roomService;
 
+    //constructor______________________________________________________
     public IndexController(RoomService roomService) {
         this.roomService = roomService;
     }
 
+
+    //método buscar habitación por ID______________________________________
     @GetMapping
     public String findRoomById(Model model, @RequestParam("id") Long id){
         //buscamos la habitacion por ID
@@ -26,7 +29,6 @@ public class IndexController {
         model.addAttribute("nameRoom", room.getName());
         model.addAttribute("descriptionRoom", room.getDescription());
         return  "index";
-
     }
 
 }

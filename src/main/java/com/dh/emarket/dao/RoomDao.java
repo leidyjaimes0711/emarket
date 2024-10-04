@@ -84,7 +84,7 @@ public class RoomDao implements IDao<Room>{
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_UPDATE);
             preparedStatement.setString(1, room.getName());
             preparedStatement.setString(2, room.getDescription());
-            preparedStatement.setLong(1, room.getId());
+            preparedStatement.setLong(3, room.getId());
             preparedStatement.execute();
 
         }catch(Exception e){
