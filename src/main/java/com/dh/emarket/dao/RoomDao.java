@@ -1,8 +1,6 @@
 package com.dh.emarket.dao;
 
 import com.dh.emarket.model.Room;
-
-import java.security.PrivateKey;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
