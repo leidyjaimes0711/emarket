@@ -1,10 +1,16 @@
+/*.color1 { #2672d8 }; azul normal
+.color2 { #8eb6eb }; azul claro
+.color3 { #0c2444 }; azul oscuro
+.color4 { #6c798c }; gris oscuro
+.color5 { #b7b9c0 }; gris claro
+*/
 .header {
     width: 100%;
     position: fixed; /* Fijo en la parte superior */
     top: 0;
     left: 0;
     height: 80px;
-    background-color: #1e1e1e; /* Negro casi negro */
+    background-color: #0e2442; /*azul casi negro */
     color: #ffffff; /* Texto blanco */
     display: flex;
     justify-content: space-around;
@@ -16,8 +22,33 @@
 .header__logo {
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding: 20px;
+   }
+
+.header__logo h3{
+    font-style: italic;
+
+}
+.logo_container{
+    background-color: yellow;
+    display: flex;
+    align-items: center; /* Alinear el logo verticalmente */
+    padding-right: 10px; /* Espacio entre logo y título */
 }
 
+.title_container{
+    background-color: cornsilk;
+    display: flex;
+    align-items: center; /* Alinear el texto verticalmente */
+}
+
+.header__logo a{
+    display: inherit;
+    align-items: inherit;
+    text-decoration: none; /* Quitar subrayado */
+    color: inherit; /* Mantener el color del texto */
+}
 .header__logo img {
     width: 50px;
     height: auto;
@@ -25,16 +56,19 @@
 }
 
 .header__nav .btn {
-    background-color: #ff3b30; /* Rojo principal */
-    color: #ffffff; /* Texto blanco */
+    background-color: #8eb6eb ;
+    color: white; /* Texto blanco */
+    font-size: medium;
     border: none;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    gap: 30px; /* Espacio entre los botones */
+
 }
 .header__nav .btn:hover {
-    background-color: #b3241c; /* Un rojo más oscuro para hover */
+    background-color: #6a9edb;
 }
 
 /* Ajuste del espacio entre los botones */

@@ -11,8 +11,10 @@ const Header = () => {
     return (
         <header className="header">
             <div className="header__logo">
-                <img src= {logo}  alt="Logo de la tienda" />
-                <h1>Team Rocket</h1>
+                <a href="/">
+                    <img src={logo} alt="Logo de la tienda"/>
+                    <h3>Estancia perfecta a un clic</h3>
+                </a>
             </div>
             <nav className="header__nav">
                 <button className="btn">Crear cuenta</button>

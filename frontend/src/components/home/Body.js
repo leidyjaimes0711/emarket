@@ -5,18 +5,18 @@ const Body = () => {
     const [products, setProducts] = useState([]);
     // Simulamos una lista de productos
     const allProducts = [
-        { id: 1, name: 'Producto 1', price: '$100', image: 'product1.jpg' },
-        { id: 2, name: 'Producto 2', price: '$200', image: 'product2.jpg' },
-        { id: 3, name: 'Producto 3', price: '$150', image: 'product3.jpg' },
-        { id: 4, name: 'Producto 4', price: '$250', image: 'product4.jpg' },
-        { id: 5, name: 'Producto 5', price: '$300', image: 'product5.jpg' },
-        { id: 6, name: 'Producto 6', price: '$50', image: 'product6.jpg' },
-        { id: 7, name: 'Producto 7', price: '$400', image: 'product7.jpg' },
-        { id: 8, name: 'Producto 8', price: '$500', image: 'product8.jpg' },
-        { id: 9, name: 'Producto 9', price: '$600', image: 'product9.jpg' },
-        { id: 10, name: 'Producto 10', price: '$700', image: 'product10.jpg' },
-        { id: 11, name: 'Producto 11', price: '$800', image: 'product11.jpg' },
-        { id: 12, name: 'Producto 12', price: '$900', image: 'product12.jpg' },
+        { id: 1, name: 'Habitación Deluxe', image: 'pexels-photo-164595.jpeg' },
+        { id: 2, name: 'Restaurante Borcelle',  image: 'pexels-photo-262047.jpeg' },
+        { id: 3, name: 'Habitación Gold', image: 'pexels-photo-271618.webp' },
+        { id: 4, name: 'Habitación Diamond',  image: 'pexels-photo-271624.webp' },
+        { id: 5, name: 'Hotel Picadini',  image: 'pexels-photo-338504.jpeg' },
+        { id: 6, name: 'Hotel Lumbard', image: 'pexels-photo-635041.jpeg' },
+        { id: 7, name: 'Cabañas La Sierra',  image: 'pexels-photo-1134176.jpeg' },
+        { id: 8, name: 'Cabañas Crystal', image: 'pexels-photo-1268855.webp' },
+        { id: 9, name: 'La Roca Hotel', image: 'pexels-photo-1838554.webp' },
+        { id: 10, name: 'Hotel Gillward',  image: 'pexels-photo-2017802.webp' },
+        { id: 11, name: 'Solaire Huts',  image: 'pexels-photo-2598638.webp' },
+        { id: 12, name: 'Mason Hotel',  image: 'pexels-photo-2869215.jpeg' },
     ];
 
     // Función para obtener productos aleatorios sin repetición
@@ -35,27 +35,46 @@ const Body = () => {
         <main className="body">
 
             <section className="search-section">
-                <input type="text" className="search-bar" placeholder="Buscar productos..."/>
+                <input type="text" className="search-bar" placeholder="Buscar"/>
             </section>
 
 
             <section className="categories-section">
                 <h2>Categorías</h2>
                 <div className="categories">
-                    <div className="category">Acción</div>
-                    <div className="category">Aventura</div>
-                    <div className="category">Estrategia</div>
+                    <div className="category">
+                        <img src="/images/hoteles.jpeg" alt="Hoteles"/>
+                        <span>Hoteles</span>
+                    </div>
+                    <div className="category">
+                        <img src="/images/hostales.webp" alt="Hostales"/>
+                        <span>Hostales</span>
+                    </div>
+                    <div className="category">
+                        <img src="/images/apartamentos.jpeg" alt="Apartamentos"/>
+                        <span>Apartamentos</span>
+                    </div>
+                    <div className="category">
+                        <img src="/images/byb.jpeg" alt="Bed and Breakfast"/>
+                        <span>Bed and Breakfast</span>
+                    </div>
+                    <div className="category">
+                        <img src="/images/cabañas.jpeg" alt="Cabañas"/>
+                        <span>Cabañas</span>
+                    </div>
                 </div>
             </section>
 
             <section className="recommendations-section">
-                <h2>Productos Recomendados</h2>
-                <div className="room-grid">
-                    {products.map((room) => (
-                        <div key={room.id} className="room-card">
-                            <img src={room.image} alt={room.name}/>
-                            <h3>{room.name}</h3>
-                            <p>{room.price}</p>
+            <h2>Recomendaciones</h2>
+                <div className="product-grid">
+                    {products.map((product) => (
+                        <div key={product.id} className="product-card">
+                            <img
+                                src={`/images/${product.image}`} alt={"imagen"}
+                            />
+                            <h3>{product.name}</h3>
+                            <p>{product.price}</p>
                         </div>
                     ))}
                 </div>

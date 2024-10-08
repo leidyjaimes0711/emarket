@@ -7,7 +7,7 @@ import '../src/Home.css';
 import Create from "./components/users/admin/Create.js";
 import React from 'react';
 import LoginPanel from "./components/login/LoginPanel.js";
-
+import Banner from './components/home/Banner.js';
 function Home() {
 
     return (
@@ -15,6 +15,14 @@ function Home() {
             <div className="app">
                 <Header />
                 <Routes>
+                    <Route
+                        path="/"
+                        element={
+                            <>
+                                <Banner />
+                                <Body />
+                            </>
+                        }/>
                     <Route path="/" element={<Body />} />
                     <Route path="/adminPanel" element={<Menu />} />
                     <Route path="/addRoom" element={<Create />} />
