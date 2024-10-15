@@ -1,5 +1,6 @@
 package com.dh.emarket.controller;
 
+import com.dh.emarket.dto.ImageDTO;
 import com.dh.emarket.exceptions.ResourceNotFoundException;
 import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
@@ -42,7 +43,7 @@ public class RoomController {
     // endpoint para mostrar todas las habitaciones
     @GetMapping
     public ResponseEntity<List<Room>> getAllRooms() {
-        List<Room> rooms = roomService.findAll();
+        List<Room> rooms = roomRepository.findAll();
         return ResponseEntity.ok(rooms);
     }
 
@@ -53,6 +54,7 @@ public class RoomController {
         return ResponseEntity.ok(room);
     }
 
+    // endpoint para subir varias imagenes a una habitación
     // endpoint para subir varias imagenes a una habitación
     @PostMapping("/{roomId}/images")
     public ResponseEntity<?> uploadImages(
@@ -79,6 +81,12 @@ public class RoomController {
         return ResponseEntity.ok("Images uploaded successfully");
     }
 
+
+    //endpoint para ver las imagenes de una habitacion por ID
+    @GetMapping("/{roomId}/images")
+    public List<ImageDTO> getImagesByRoom(@PathVariable Long roomId) {
+        return imageService.getImagesByRoom(roomId);
+    }
 
     // endpoint para agregar una nueva habitación
     @PostMapping

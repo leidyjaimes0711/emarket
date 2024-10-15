@@ -1,10 +1,13 @@
 package com.dh.emarket.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 public class Image {
+
+    //atributos
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +22,24 @@ public class Image {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonIgnore // Evita que la información de Room se serialice
     private Room room;
 
+
+    //constructores
+
+    public Image(Long id, byte[] data, String fileName, String fileType) {
+        this.id = id;
+        this.data = data;
+        this.fileName = fileName;
+        this.fileType = fileType;
+    }
+
+    public Image() {
+
+    }
+
     // Getters y Setters
-
-
     public Long getId() {
         return id;
     }
