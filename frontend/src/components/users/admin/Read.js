@@ -55,14 +55,13 @@ const Read = () => {
                         <li key={room.id}>
                             <h3>{room.name}</h3>
                             <p>{room.description}</p>
-                            {room.image && (
-                                <img
-                                    src={`data:image/jpeg;base64,${arrayBufferToBase64(room.image)}`}
-                                    alt="Imagen de la habitación"
-                                    width="200px"
-                                    height="150px"
-                                />
-                            )}
+                                {room.image && (
+                                    <img
+                                        src={`data:image/jpeg;base64,${room.image}`}
+                                        alt="Imagen de la habitación"
+                                        width="200px"
+                                        height="150px"
+                                    />)}
                         </li>
                     ))}
                 </ul>

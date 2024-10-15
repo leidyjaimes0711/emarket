@@ -55,15 +55,16 @@ public class RoomController {
     }
 
     // endpoint para subir varias imagenes a una habitación
-    // endpoint para subir varias imagenes a una habitación
     @PostMapping("/{roomId}/images")
     public ResponseEntity<?> uploadImages(
             @PathVariable Long roomId,
             @RequestParam("files") MultipartFile[] files) {
 
+        // Buscar la habitación por ID
         Room room = roomService.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
 
+        // Procesar los archivos
         for (MultipartFile file : files) {
             try {
                 Image image = new Image();
@@ -71,14 +72,18 @@ public class RoomController {
                 image.setFileType(file.getContentType());
                 image.setData(file.getBytes());
                 room.addImage(image);
+                System.out.println("Imagen procesada: " + file.getOriginalFilename());
             } catch (IOException e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("Error uploading file: " + file.getOriginalFilename());
+                        .body("Error al subir el archivo: " + file.getOriginalFilename());
             }
         }
 
+        // Guardar la habitación con las imágenes
         roomService.save(room);
-        return ResponseEntity.ok("Images uploaded successfully");
+        System.out.println(room);
+
+        return ResponseEntity.ok("Imágenes subidas con éxito." );
     }
 
 

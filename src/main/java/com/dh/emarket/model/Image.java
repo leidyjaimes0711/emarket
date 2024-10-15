@@ -1,6 +1,7 @@
 package com.dh.emarket.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -8,7 +9,6 @@ import jakarta.persistence.*;
 public class Image {
 
     //atributos
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +21,8 @@ public class Image {
     private String fileType;
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
-    @JsonIgnore // Evita que la información de Room se serialice
+    @JsonBackReference // Esto indica que esta es la parte inversa de la relación
+
     private Room room;
 
 

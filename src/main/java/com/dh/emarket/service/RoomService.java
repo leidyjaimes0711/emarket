@@ -26,7 +26,7 @@ public class RoomService {
     //métodos
 
     public Room save(Room room){
-        return roomIDao.save(room);
+        return roomRepository.save(room);
     }
 
     public void update(Room room){
