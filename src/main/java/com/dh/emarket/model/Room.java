@@ -74,4 +74,5 @@ public class Room {
     public void removeImage(Image image) {
         images.remove(image);
     }
+
 }

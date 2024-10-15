@@ -2,10 +2,12 @@ package com.dh.emarket.dao;
 
 import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
+import org.springframework.stereotype.Repository;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 public class RoomDao implements IDao<Room>{
 
     private static final String SQL_INSERT = "INSERT INTO ROOM " +
@@ -23,29 +25,66 @@ public class RoomDao implements IDao<Room>{
     @Override
     public Room save(Room room) {
         Connection connection = null;
-        try{
+        PreparedStatement preparedStatement = null;
+        PreparedStatement imageStmt = null;
+
+        try {
             connection = DB.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-            //guarda los datos que recibe por parametro
+            connection.setAutoCommit(false); // Desactivar el auto-commit
+
+            // Guardar los datos de la habitación
+            preparedStatement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, room.getName());
             preparedStatement.setString(2, room.getDescription());
             preparedStatement.execute();
 
-            //recupera el id en el que iba llenandose la tabla
+            // Recuperar el ID generado para la habitación
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
-            while (resultSet.next()){
+            if (resultSet.next()) {
                 room.setId(resultSet.getLong(1));
             }
 
-        }catch(Exception e){
+            // Guardar las imágenes asociadas a la habitación
+            if (room.getImages() != null && !room.getImages().isEmpty()) {
+                String imageInsertQuery = "INSERT INTO image (file_name, file_type, data, room_id) VALUES (?, ?, ?, ?)";
+                imageStmt = connection.prepareStatement(imageInsertQuery);
+
+                for (Image image : room.getImages()) {
+                    imageStmt.setString(1, image.getFileName());
+                    imageStmt.setString(2, image.getFileType());
+                    imageStmt.setBytes(3, image.getData());
+                    imageStmt.setLong(4, room.getId()); // Relacionar la imagen con la habitación
+                    imageStmt.executeUpdate();
+                }
+            }
+
+            connection.commit(); // Confirmar la transacción si todo va bien
+
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback(); // Revertir la transacción en caso de error
+                } catch (Exception rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
             e.printStackTrace();
         } finally {
-            try{
-                connection.close();
-            }catch (Exception e){
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close(); // Cerrar el PreparedStatement
+                }
+                if (imageStmt != null) {
+                    imageStmt.close(); // Cerrar el PreparedStatement de las imágenes
+                }
+                if (connection != null) {
+                    connection.close(); // Cerrar la conexión
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
         return room;
     }
 
@@ -72,14 +111,19 @@ public class RoomDao implements IDao<Room>{
             }
 
             // Ahora obtener las imágenes relacionadas con la habitación
+            // Ahora obtener las imágenes relacionadas con la habitación
             if (room != null) {
-                String imageQuery = "SELECT * FROM images WHERE room_id = ?";
+                String imageQuery = "SELECT * FROM image WHERE room_id = ?";
                 PreparedStatement imageStmt = connection.prepareStatement(imageQuery);
                 imageStmt.setLong(1, room.getId());  // Usamos el ID de la habitación
                 ResultSet imageResultSet = imageStmt.executeQuery();
 
                 while (imageResultSet.next()) {
-                    Image image = new Image();  // URL o nombre de archivo
+                    Image image = new Image();
+                    image.setId(imageResultSet.getLong("id"));
+                    image.setFileName(imageResultSet.getString("file_name"));
+                    image.setFileType(imageResultSet.getString("file_type"));
+                    image.setData(imageResultSet.getBytes("data"));
                     images.add(image);
                 }
                 // Ahora que tenemos las imágenes, las agregamos al objeto Room

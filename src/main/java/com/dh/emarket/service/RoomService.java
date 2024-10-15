@@ -15,37 +15,40 @@ public class RoomService {
 
     //atributos
     private final IDao<Room> roomIDao;
+
     @Autowired
     private RoomRepository roomRepository;
 
-    //constructor
-    public RoomService (){
-        this.roomIDao = new RoomDao();
+    // Constructor para inicializar el DAO
+    @Autowired
+    public RoomService (IDao<Room> roomIDao){
+        this.roomIDao = roomIDao;
     }
 
-    //métodos
+    // Métodos usando el DAO
 
+    // Guardar una habitación
     public Room save(Room room){
-        return roomRepository.save(room);
+        return roomRepository.save(room);  // Usamos el DAO para guardar
     }
 
+    // Actualizar una habitación
     public void update(Room room){
-        roomIDao.update(room);
+        roomIDao.update(room);  // Usamos el DAO para actualizar
     }
+
+    // Eliminar una habitación
     public void delete(Long id){
-        roomIDao.delete(id);
+        roomIDao.delete(id);  // Usamos el DAO para eliminar
     }
 
+    // Listar todas las habitaciones
     public List<Room> findAll(){
-        return roomRepository.findAll();
+        return roomIDao.findAll();  // Usamos el DAO para obtener todas
     }
 
+    // Encontrar habitación por ID
     public Optional<Room> findById(Long id) {
-        return roomRepository.findById(id);
+        return Optional.ofNullable(roomIDao.findById(id));  // Usamos el DAO para buscar por ID
     }
-
-
-
-
-
 }

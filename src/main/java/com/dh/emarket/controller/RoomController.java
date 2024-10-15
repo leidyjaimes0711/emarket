@@ -1,7 +1,6 @@
 package com.dh.emarket.controller;
 
 import com.dh.emarket.dto.ImageDTO;
-import com.dh.emarket.exceptions.ResourceNotFoundException;
 import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
 import com.dh.emarket.repository.RoomRepository;
@@ -48,10 +47,21 @@ public class RoomController {
     }
 
     // endpoint para mostrar 1 habitacion por id
+
+    // Custom Exception
+    @ResponseStatus(HttpStatus.NOT_FOUND)  // Retorna un 404 cuando no se encuentra la habitación
+    public static class ResourceNotFoundException extends RuntimeException {
+        public ResourceNotFoundException(String message) {
+            super(message);
+        }
+    }
+    // Endpoint para obtener una habitación por id
     @GetMapping("/{roomId}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
-        Room room = roomService.findById(roomId).orElseThrow(() -> new RuntimeException("Room not found"));
-        return ResponseEntity.ok(room);
+        Room room = roomService.findById(roomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Room with id " + roomId + " not found"));
+
+        return ResponseEntity.ok(room);  // Si la habitación se encuentra, retornamos 200 OK con la habitación
     }
 
     // endpoint para subir varias imagenes a una habitación
