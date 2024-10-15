@@ -1,38 +1,61 @@
+/* Estilos generales para el contenedor del formulario de login */
 .login-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ddd;
+    background-color: #f7f7f7; /* Fondo claro */
+    padding: 30px;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    max-width: 400px;  /* Ancho máximo del formulario */
+    margin: 50px auto; /* Centrar el formulario */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    text-align: center;
+}
+.login-container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
+/* Estilos para los grupos de formulario */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    text-align: left;
 }
 
 .form-group label {
     display: block;
     margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+    width: 100%;  /* Ocupar todo el ancho del contenedor */
+    padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff;
+    box-sizing: border-box;  /* Asegura que el padding no afecte el ancho total */
+    transition: border-color 0.3s ease;
 }
 
+.form-group input:focus {
+    border-color: #4CAF50;  /* Cambia el color del borde cuando el campo está en foco */
+    outline: none;
+}
+
+/* Estilos para el botón de enviar */
 .btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #4CAF50;  /* Verde */
+    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 4px;
+    font-size: 16px;
     cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #45a049;  /* Verde más oscuro en hover */
 }

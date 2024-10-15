@@ -1,5 +1,6 @@
 package com.dh.emarket.dao;
 
+import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,29 +51,58 @@ public class RoomDao implements IDao<Room>{
 
     @Override
     public Room findById(Long id) {
+
         Connection connection = null;
         Room room = null;
-        try{
+        List<Image> images = new ArrayList<>();  // Crear una lista de imágenes vacía
+        try {
             connection = DB.getConnection();
+
+            // Primero obtener los datos de la habitación
             PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ID);
             preparedStatement.setLong(1, id);
-
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                room = new Room(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3));
+
+            if (resultSet.next()) {
+                // Crear el objeto Room sin las imágenes todavía
+                room = new Room(resultSet.getLong(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        new ArrayList<>());  // De momento, lista vacía para imágenes
             }
 
-        }catch(Exception e){
+            // Ahora obtener las imágenes relacionadas con la habitación
+            if (room != null) {
+                String imageQuery = "SELECT * FROM images WHERE room_id = ?";
+                PreparedStatement imageStmt = connection.prepareStatement(imageQuery);
+                imageStmt.setLong(1, room.getId());  // Usamos el ID de la habitación
+                ResultSet imageResultSet = imageStmt.executeQuery();
+
+                while (imageResultSet.next()) {
+                    Image image = new Image();  // URL o nombre de archivo
+                    images.add(image);
+                }
+                // Ahora que tenemos las imágenes, las agregamos al objeto Room
+                room.setImages(images);
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try{
-                connection.close();
-            }catch (Exception e){
-                e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
         return room;
+
+
     }
+
 
     @Override
     public void update(Room room) {
@@ -119,31 +149,9 @@ public class RoomDao implements IDao<Room>{
 
     @Override
     public List<Room> findAll() {
-        Connection connection = null;
-        Room room = null;
-        List<Room> roomList = new ArrayList<>();
-        try{
-            connection = DB.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL_SELECT_ALL);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                room = new Room(resultSet.getLong(1), resultSet.getString(2), resultSet.getString(3));
-                roomList.add(room);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try{
-                assert connection != null;
-                connection.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return roomList;
+        return null;
     }
+
 
     @Override
     public Room findByString(String value) {

@@ -1,4 +1,4 @@
-package com.dh.emarket.exception;
+package com.dh.emarket.exceptions;
 
 
 import org.springframework.http.HttpStatus;

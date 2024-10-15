@@ -11,4 +11,3 @@ public interface IDao<T> {
     List<T> findAll();
     T findByString(String value);
 }
-

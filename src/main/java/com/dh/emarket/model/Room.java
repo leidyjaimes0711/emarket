@@ -1,28 +1,36 @@
 package com.dh.emarket.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Room {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
     private String description;
 
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Image> images;
 
 
-
-    public Room(Long id, String name, String description) {
+    public Room(Long id, String name, String description, List<Image> images) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.images = images;
     }
 
-// Getters and setters
+    public Room() {
+
+    }
+
+    // Getters y Setters
 
 
     public Long getId() {
@@ -48,5 +56,20 @@ public class Room {
     public void setDescription(String description) {
         this.description = description;
     }
-}
 
+    public List<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
+
+    public void addImage(Image image) {
+        images.add(image);
+    }
+
+    public void removeImage(Image image) {
+        images.remove(image);
+    }
+}

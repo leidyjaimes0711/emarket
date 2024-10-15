@@ -1,0 +1,49 @@
+/* Estilos generales para el contenedor del menú */
+.menu {
+    background-color: #f0f0f0; /* Fondo del menú */
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto; /* Centrar el menú */
+}
+
+.menu h2 {
+    color: #333;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los botones del menú en forma horizontal */
+.admin-options {
+    display: flex;
+    flex-direction: row; /* Los botones estarán en fila */
+    justify-content: space-around; /* Distribuye los botones equitativamente */
+    gap: 15px; /* Espacio entre los botones */
+    padding: 30px;
+}
+
+.btn {
+    background-color: #4CAF50; /* Color verde para los botones */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Suave transición al hacer hover */
+    text-align: center;
+    flex: 1; /* Hace que los botones ocupen el mismo espacio horizontal */
+}
+
+.btn:hover {
+    background-color: #45a049; /* Color más oscuro en hover */
+}
+
+/* Estilos para el SubMenu */
+
+.submenu h2 {
+    font-size: 20px;
+    color: #555;
+}
+
+

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../../styles/AddProduct.css';
+import '../../../styles/Create.css';
 
 const Create = () => {
 
@@ -25,7 +25,7 @@ const Create = () => {
         //hacer petición al backend
 
         try {
-            const response = await fetch('http://localhost:8080/rooms', {
+            const response = await fetch('http://localhost:8080/api/rooms', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

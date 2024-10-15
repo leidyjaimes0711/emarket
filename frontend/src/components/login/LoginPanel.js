@@ -1,6 +1,7 @@
-import '../../styles/LoginPanel.css';
 import React, {useState} from 'react';
 import {useNavigate } from 'react-router-dom';
+import '../../styles/LoginPanel.css';
+
 const LoginPanel = () => {
 
     const [username, setUsername] = useState('');
@@ -16,7 +17,7 @@ const LoginPanel = () => {
         // Lógica básica de autenticación
         if (username === 'admin' && password === '123') {
             // Si la autenticación es correcta, puedes redirigir a otra página, como el dashboard de admin
-            navigate("/adminPanel"); // Cambia '/dashboard' por la ruta que necesites
+            navigate("/adminMenu"); // Cambia '/dashboard' por la ruta que necesites
         }
         else {
             if(username === 'user' && password === '123'){

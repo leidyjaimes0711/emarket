@@ -24,7 +24,7 @@ function Home() {
                             </>
                         }/>
                     <Route path="/" element={<Body />} />
-                    <Route path="/adminPanel" element={<Menu />} />
+                    <Route path="/adminMenu" element={<Menu />} />
                     <Route path="/addRoom" element={<Create />} />
                     <Route path="/loginPanel" element={<LoginPanel />} />
                 </Routes>

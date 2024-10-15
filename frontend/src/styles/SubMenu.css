@@ -1,0 +1,40 @@
+/* Estilos generales para el contenedor del SubMenu */
+.submenu {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+    max-width: 600px;
+    margin: 20px auto; /* Centra el SubMenu */
+    text-align: center;
+}
+
+/* Estilos para los botones del SubMenu */
+.admin-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Espacio entre los botones */
+    margin-bottom: 20px; /* Separación entre los botones y los componentes de creación/lista */
+}
+
+.admin-options .btn {
+    background-color: #4CAF50; /* Color verde para los botones */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex: 1; /* Hace que todos los botones tengan el mismo tamaño */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Pequeña sombra en los botones */
+}
+
+/* Efecto de hover en los botones */
+.admin-options .btn:hover {
+    background-color: #45a049; /* Verde más oscuro en hover */
+    transform: translateY(-2px); /* Efecto de elevar ligeramente los botones en hover */
+}
+
+
+

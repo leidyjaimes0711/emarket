@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import '../../../styles/AddProduct.css';
+import '../../../styles/Read.css';
+
 
 const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
 
     //funcion para listar datos al dar click al boton guardar
-    const ListRooms = async () => {
-        //hacer petición al backend
+    // Función para listar los datos al cargar la página
+    const listRooms = async () => {
         try {
-            const response = await fetch('http://localhost:8080/rooms', {
+            const response = await fetch('http://localhost:8080/api/rooms', {
                 method: 'GET'
             });
             if (response.ok) {
@@ -27,9 +28,19 @@ const Read = () => {
 
     // Usamos useEffect para llamar a la función al cargar el componente
     useEffect(() => {
-        ListRooms();
+        listRooms();
     }, []);  // El arreglo vacío asegura que solo se ejecute una vez cuando se carga el componente
 
+    // Función para convertir la imagen en byte[] a Base64
+    const arrayBufferToBase64 = (buffer) => {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    };
 
     return (
         <div>
@@ -44,6 +55,14 @@ const Read = () => {
                         <li key={room.id}>
                             <h3>{room.name}</h3>
                             <p>{room.description}</p>
+                            {room.image && (
+                                <img
+                                    src={`data:image/jpeg;base64,${arrayBufferToBase64(room.image)}`}
+                                    alt="Imagen de la habitación"
+                                    width="200px"
+                                    height="150px"
+                                />
+                            )}
                         </li>
                     ))}
                 </ul>

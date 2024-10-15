@@ -1,50 +1,39 @@
-import '../../../styles/AdminPanel.css';
 import React, {useState} from 'react';
 import Create from "./Create.js";
 import Read from "./Read.js";
-
+import '../../../styles/SubMenu.css';
 
 const SubMenu = () => {
-    // Estado para controlar si el componente se muestra o no
-    const [showAddRoom, setShowAddRoom] = useState(false);
 
-    // Estado para controlar si el componente se muestra o no
-    const [showRooms, setShowRooms] = useState(false);
+    // Estado único para controlar cuál componente se muestra
+    const [activeComponent, setActiveComponent] = useState(null);
 
-
-    // Función que alterna el estado del componente
-    const toggleAddRoomComponent = () => {
-        setShowAddRoom(!showAddRoom);
+    // Función para alternar el estado del componente activo
+    const showComponent = (componentName) => {
+        if (activeComponent === componentName) {
+            setActiveComponent(null);  // Si ya está activo, oculta el componente
+        } else {
+            setActiveComponent(componentName);  // Si no está activo, muestra el componente seleccionado
+        }
     };
-    // Función que alterna el estado del componente
-    const toggleShowRoomsComponent = () => {
-        setShowRooms(!showRooms);
-    };
-
     return (
         <div className="submenu">
-
-            <h2>Submenu</h2>
-
             <div className="admin-options">
-                <button className="btn" onClick={toggleAddRoomComponent}>
-                    {showAddRoom ? '' : ''} Crear
+                <button className="btn" onClick={() => showComponent('create')}>
+                    Crear
                 </button>
                 <button className="btn">Editar</button>
-                <button className="btn" onClick={toggleShowRoomsComponent}>{
-                    showRooms ? '' : ''} Listar
+                <button className="btn" onClick={() => showComponent('list')}>
+                    Listar
                 </button>
                 <button className="btn">Eliminar</button>
-
-                {showAddRoom && <Create/>}
-                {showRooms&& <Read/>}
             </div>
 
-            <div className="body-admin-options">
-
-            </div>
+            {/* Renderizar el componente según el valor de activeComponent */}
+            {activeComponent === 'create' && <Create />}
+            {activeComponent === 'list' && <Read />}
+            <div className="body-admin-options"></div>
         </div>
     );
 };
-
 export default SubMenu;
