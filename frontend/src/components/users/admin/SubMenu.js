@@ -26,7 +26,7 @@ const SubMenu = () => {
                 <button className="btn" onClick={() => showComponent('list')}>
                     Listar
                 </button>
-                <button className="btn">Eliminar</button>
+
             </div>
 
             {/* Renderizar el componente según el valor de activeComponent */}

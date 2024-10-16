@@ -23,6 +23,25 @@ const Read = () => {
         }
     };
 
+
+    // Función para eliminar una habitación
+    const deleteRoom = async (roomId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/rooms/${roomId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                setRooms(rooms.filter(room => room.id !== roomId));  // Actualiza la lista después de eliminar
+            } else {
+                setError('Error al eliminar la habitación');
+            }
+        } catch (error) {
+            console.error('Error al eliminar la habitación', error);
+            setError('Ocurrió un error al conectar con el servidor');
+        }
+    };
+
+
     // Usamos useEffect para llamar a la función al cargar el componente
     useEffect(() => {
         listRooms();
@@ -54,6 +73,7 @@ const Read = () => {
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
+                            <button onClick={() => deleteRoom(room.id)}>Eliminar</button> {/* Botón eliminar */}
                         </li>
                     ))}
                 </ul>

@@ -140,4 +140,17 @@ public class RoomController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
+
+    // Endpoint para eliminar una habitación por ID ____________________________________________
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
+        boolean isDeleted = roomService.delete(id);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();  // 200 OK si se eliminó correctamente
+        } else {
+            return ResponseEntity.notFound().build();  // 404 Not Found si la habitación no existe
+        }
+    }
+
+
 }

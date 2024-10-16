@@ -20,8 +20,9 @@ public class RoomService {
     }
 
     // Eliminar una habitación por ID
-    public void delete(Long id){
+    public boolean delete(Long id){
         roomRepository.deleteById(id);  // Eliminar por ID
+        return true;
     }
 
     // Listar todas las habitaciones
