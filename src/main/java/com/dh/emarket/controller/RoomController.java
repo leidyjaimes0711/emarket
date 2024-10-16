@@ -153,4 +153,16 @@ public class RoomController {
     }
 
 
+    // Endpoint para actualizar una habitación por ID___________________________________
+    @PutMapping("/{id}")
+    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
+        Room updatedRoom = roomService.update(id, roomDetails);
+        if (updatedRoom != null) {
+            return ResponseEntity.ok(updatedRoom);  // 200 OK si se actualiza correctamente
+        } else {
+            return ResponseEntity.notFound().build();  // 404 Not Found si la habitación no existe
+        }
+    }
+
+
 }

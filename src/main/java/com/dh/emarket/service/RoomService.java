@@ -25,6 +25,21 @@ public class RoomService {
         return true;
     }
 
+    // Método para actualizar una habitación
+    public Room update(Long id, Room roomDetails) {
+        Optional<Room> roomOptional = roomRepository.findById(id);
+        if (roomOptional.isPresent()) {
+            Room room = roomOptional.get();
+            room.setName(roomDetails.getName());
+            room.setDescription(roomDetails.getDescription());
+            // Aquí puedes agregar más campos para actualizar si es necesario
+            return roomRepository.save(room);
+        } else {
+            return null;  // Si la habitación no existe, retornamos null
+        }
+    }
+
+
     // Listar todas las habitaciones
     public List<Room> findAll(){
         return roomRepository.findAll();  // Obtener todas

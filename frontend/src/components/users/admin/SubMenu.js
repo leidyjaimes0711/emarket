@@ -20,11 +20,10 @@ const SubMenu = () => {
         <div className="submenu">
             <div className="admin-options">
                 <button className="btn" onClick={() => showComponent('create')}>
-                    Crear
+                    Crear habitación
                 </button>
-                <button className="btn">Editar</button>
                 <button className="btn" onClick={() => showComponent('list')}>
-                    Listar
+                    Mostrar todas
                 </button>
 
             </div>

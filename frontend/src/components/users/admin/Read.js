@@ -3,6 +3,8 @@ import '../../../styles/Read.css';
 const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
+    const [editingRoom, setEditingRoom] = useState(null); // Estado para la habitación que se va a editar
+
 
     // Función para listar los datos al cargar la página
     const listRooms = async () => {
@@ -42,6 +44,33 @@ const Read = () => {
     };
 
 
+    // Función para manejar la edición de una habitación
+    const handleEdit = (room) => {
+        setEditingRoom(room);  // Establece la habitación que será editada
+    };
+
+    // Función para enviar los datos editados
+    const saveEditRoom = async (room) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/rooms/${room.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(room)
+            });
+            if (response.ok) {
+                listRooms();  // Actualiza la lista después de editar
+                setEditingRoom(null);  // Cierra el formulario de edición
+            } else {
+                setError('Error al guardar los cambios');
+            }
+        } catch (error) {
+            console.error('Error al guardar los cambios', error);
+            setError('Ocurrió un error al conectar con el servidor');
+        }
+    };
+
     // Usamos useEffect para llamar a la función al cargar el componente
     useEffect(() => {
         listRooms();
@@ -73,11 +102,46 @@ const Read = () => {
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
+                            <button onClick={() => handleEdit(room)}>Editar</button> {/* Botón de editar */}
                             <button onClick={() => deleteRoom(room.id)}>Eliminar</button> {/* Botón eliminar */}
                         </li>
                     ))}
                 </ul>
             )}
+
+            {editingRoom && (
+                <div className="edit-form">
+                    <h3>Editando Habitación: {editingRoom.name}</h3>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        saveEditRoom(editingRoom);
+                    }}>
+                        <label>
+                            Nombre:
+                            <input
+                                type="text"
+                                value={editingRoom.name}
+                                onChange={(e) => setEditingRoom({ ...editingRoom, name: e.target.value })}
+                            />
+                        </label>
+                        <label>
+                            Descripción:
+                            <input
+                                type="text"
+                                value={editingRoom.description}
+                                onChange={(e) => setEditingRoom({ ...editingRoom, description: e.target.value })}
+                            />
+                        </label>
+                        <button type="submit">Guardar</button>
+                        <button type="button" onClick={() => setEditingRoom(null)}>Cancelar</button>
+                    </form>
+                </div>
+            )}
+
+
+
+
+
         </div>
     );
 };
