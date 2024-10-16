@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 
@@ -103,11 +104,40 @@ public class RoomController {
         return imageService.getImagesByRoom(roomId);
     }
 
-    // endpoint para agregar una nueva habitación
+    // endpoint para agregar una nueva habitación_______________________________________________
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestBody Room room) {
-        Room newRoom = roomRepository.save(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newRoom);
+    public ResponseEntity<Room> createRoom(@RequestParam("name") String name,
+                                           @RequestParam("description") String description,
+                                           @RequestParam("images") List<MultipartFile> images) {
+        // Crear una nueva instancia de Room y establecer sus atributos
+        Room room = new Room();
+        room.setName(name);
+        room.setDescription(description);
+// Procesar y guardar las imágenes
+        List<Image> imageList = new ArrayList<>();
+        for (MultipartFile file : images) {
+            try {
+                Image image = new Image();
+                image.setFileName(file.getOriginalFilename());
+                image.setFileType(file.getContentType());
+                image.setData(file.getBytes());  // Guardar los bytes de la imagen
+
+                image.setRoom(room);  // Relacionar la imagen con la habitación
+                imageList.add(image);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();  // Manejo del error al guardar imagen
+            }
+        }
+
+        // Establecer las imágenes en la habitación
+        room.setImages(imageList);
+
+        // Guardar la habitación en la base de datos
+        Room savedRoom = roomRepository.save(room);
+
+        // Devolver la habitación creada como respuesta
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
     }
 
 }

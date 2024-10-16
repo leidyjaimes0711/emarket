@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import '../../../styles/Read.css';
-
-
 const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
