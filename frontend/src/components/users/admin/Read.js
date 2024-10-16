@@ -6,7 +6,6 @@ const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
 
-    //funcion para listar datos al dar click al boton guardar
     // Función para listar los datos al cargar la página
     const listRooms = async () => {
         try {
@@ -31,17 +30,6 @@ const Read = () => {
         listRooms();
     }, []);  // El arreglo vacío asegura que solo se ejecute una vez cuando se carga el componente
 
-    // Función para convertir la imagen en byte[] a Base64
-    const arrayBufferToBase64 = (buffer) => {
-        let binary = '';
-        const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-        for (let i = 0; i < len; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return window.btoa(binary);
-    };
-
     return (
         <div>
             <h2>Lista de Habitaciones</h2>
@@ -55,13 +43,19 @@ const Read = () => {
                         <li key={room.id}>
                             <h3>{room.name}</h3>
                             <p>{room.description}</p>
-                                {room.image && (
+                            {room.images && room.images.length > 0 ? (
+                                room.images.map((image, index) => (
                                     <img
-                                        src={`data:image/jpeg;base64,${room.image}`}
-                                        alt="Imagen de la habitación"
+                                        key={index}
+                                        src={`data:image/jpeg;base64,${image.data}`}  // Ya en base64
+                                        alt={`Imagen de la habitación ${index + 1}`}
                                         width="200px"
                                         height="150px"
-                                    />)}
+                                    />
+                                ))
+                            ) : (
+                                <p>No hay imágenes disponibles</p>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -69,4 +63,5 @@ const Read = () => {
         </div>
     );
 };
+
 export default Read;
