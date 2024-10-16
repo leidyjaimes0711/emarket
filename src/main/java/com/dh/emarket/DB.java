@@ -1,4 +1,4 @@
-package com.dh.emarket.dao;
+package com.dh.emarket;
 
 
 import javax.persistence.Entity;

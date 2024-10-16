@@ -1,6 +1,5 @@
 package com.dh.emarket;
 
-import com.dh.emarket.dao.DB;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

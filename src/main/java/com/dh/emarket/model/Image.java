@@ -22,7 +22,6 @@ public class Image {
 
     @ManyToOne
     @JsonBackReference // Esto indica que esta es la parte inversa de la relación
-
     private Room room;
 
 
