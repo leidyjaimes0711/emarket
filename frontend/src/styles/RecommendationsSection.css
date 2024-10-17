@@ -1,0 +1,16 @@
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas de tamaño igual */
+    grid-gap: 20px; /* Espacio entre los elementos */
+    padding: 10px;
+}
+
+.grid-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+

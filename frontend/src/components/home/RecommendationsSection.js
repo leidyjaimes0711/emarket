@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import '../../styles/RecommendationsSection.css';
 
 const RecommendationsSection = () => {
     {
@@ -14,8 +15,9 @@ const RecommendationsSection = () => {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);  // Verifica si los datos están llegando
-                    setRooms(data);
+                    const shuffledRooms = data.sort(() => 0.5 - Math.random());
+                    const randomRooms = shuffledRooms.slice(0, 10);
+                    setRooms(randomRooms);
                 } else {
                     setError('Error al obtener la lista de habitaciones');
                 }
@@ -34,15 +36,15 @@ const RecommendationsSection = () => {
 
         return (
             <div>
-                <h2>Lista de Habitaciones</h2>
+                <h2>Recomendaciones</h2>
                 {error && <p>{error}</p>} {/* Mostrar errores si los hay */}
 
                 {rooms.length === 0 ? (
                     <p>No hay habitaciones disponibles</p>
                 ) : (
-                    <ul>
+                    <div className="grid-container">
                         {rooms.map((room) => (
-                            <li key={room.id}>
+                            <div className="grid-item" key={room.id}>
                                 <h3>{room.name}</h3>
                                 <p>{room.description}</p>
                                 {room.images && room.images.length > 0 ? (
@@ -58,10 +60,9 @@ const RecommendationsSection = () => {
                                 ) : (
                                     <p>No hay imágenes disponibles</p>
                                 )}
-
-                            </li>
+                            </div>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </div>
         );

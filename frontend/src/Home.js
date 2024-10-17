@@ -7,7 +7,6 @@ import '../src/Home.css';
 import Create from "./components/users/admin/Create.js";
 import React from 'react';
 import LoginPanel from "./components/login/LoginPanel.js";
-import Banner from './components/home/Banner.js';
 function Home() {
 
     return (
@@ -19,7 +18,6 @@ function Home() {
                         path="/"
                         element={
                             <>
-                                <Banner />
                                 <Body />
                             </>
                         }/>
