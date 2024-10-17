@@ -1,18 +1,20 @@
 /* Estilos generales para el contenedor del menú */
 .menu {
-    background-color: #f0f0f0; /* Fondo del menú */
+    background-color: #1e2a38;
+    color: #f0f0f0; /* Texto claro para mayor contraste */
     padding: 20px;
-    max-width: 600px;
+    max-width: 1000px;
     margin: 0 auto; /* Centrar el menú */
-}
 
-.menu h2 {
-    color: #333;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+.menu h2 {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #b0c4de; /* Tono claro azul-gris para el título */
 }
-
 /* Estilos para los botones del menú en forma horizontal */
 .admin-options {
     display: flex;
@@ -23,27 +25,34 @@
 }
 
 .btn {
-    background-color: #4CAF50; /* Color verde para los botones */
+    background-color: #4a90e2; /* Usamos un tono azul medio */
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Suave transición al hacer hover */
-    text-align: center;
-    flex: 1; /* Hace que los botones ocupen el mismo espacio horizontal */
+    transition: background-color 0.3s ease;
+    font-size: 16px;
 }
 
 .btn:hover {
-    background-color: #45a049; /* Color más oscuro en hover */
+    background-color: #3a78c0; /* Un tono más oscuro al hacer hover */
 }
-
 /* Estilos para el SubMenu */
 
-.submenu h2 {
-    font-size: 20px;
-    color: #555;
+.btn:active {
+    background-color: #2f5e99; /* Más oscuro aún cuando se hace clic */
 }
 
-
+.submenu {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3a4a58; /* Tono más oscuro de la paleta */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #f0f0f0;
+}
+.submenu h3 {
+    font-size: 18px;
+    color: #b0c4de; /* Tono claro para el texto del submenú */
+}

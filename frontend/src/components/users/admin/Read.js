@@ -6,7 +6,7 @@ const Read = () => {
     const [editingRoom, setEditingRoom] = useState(null); // Estado para la habitación que se va a editar
 
 
-    // Función para listar los datos al cargar la página
+    // Función para listar las habitaciones al cargar la página
     const listRooms = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/rooms', {

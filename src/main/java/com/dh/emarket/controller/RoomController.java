@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,16 +106,23 @@ public class RoomController {
         return imageService.getImagesByRoom(roomId);
     }
 
-    // endpoint para agregar una nueva habitación_______________________________________________
+    // Endpoint para agregar una nueva habitación
     @PostMapping
-    public ResponseEntity<Room> createRoom(@RequestParam("name") String name,
-                                           @RequestParam("description") String description,
-                                           @RequestParam("images") List<MultipartFile> images) {
+    public ResponseEntity<?> createRoom(@RequestParam("name") String name,
+                                        @RequestParam("description") String description,
+                                        @RequestParam("images") List<MultipartFile> images) {
+        // Verificar si el nombre ya existe en la base de datos
+        Optional<Room> existingRoom = roomRepository.findByName(name);
+        if (existingRoom.isPresent()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre de la habitación ya está en uso");
+        }
+
         // Crear una nueva instancia de Room y establecer sus atributos
         Room room = new Room();
         room.setName(name);
         room.setDescription(description);
-// Procesar y guardar las imágenes
+
+        // Procesar y guardar las imágenes
         List<Image> imageList = new ArrayList<>();
         for (MultipartFile file : images) {
             try {
@@ -125,8 +134,8 @@ public class RoomController {
                 image.setRoom(room);  // Relacionar la imagen con la habitación
                 imageList.add(image);
             } catch (IOException e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();  // Manejo del error al guardar imagen
+                // Manejo del error al procesar la imagen
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar las imágenes");
             }
         }
 
@@ -134,10 +143,13 @@ public class RoomController {
         room.setImages(imageList);
 
         // Guardar la habitación en la base de datos
-        Room savedRoom = roomRepository.save(room);
-
-        // Devolver la habitación creada como respuesta
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+        try {
+            Room savedRoom = roomRepository.save(room);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+        } catch (Exception e) {
+            // Manejo del error al guardar la habitación
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al guardar la habitación");
+        }
     }
 
 

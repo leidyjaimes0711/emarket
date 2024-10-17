@@ -1,64 +1,73 @@
 import React, { useState, useEffect } from 'react';
 
+
 const RecommendationsSection = () => {
+    {
+        const [error, setError] = useState('');
+        const [rooms, setRooms] = useState([]);
 
-    const [recommendations, setRecommendations] = useState([]);// Estado para almacenar los productos (habitaciones en este caso)
-    const [error, setError] = useState('');
-
-    // Función para obtener las habitaciones desde el backend
-    const fetchRecommendations = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/rooms', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
+        // Función para listar los datos al cargar la página
+        const listRooms = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/api/rooms', {
+                    method: 'GET'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);  // Verifica si los datos están llegando
+                    setRooms(data);
+                } else {
+                    setError('Error al obtener la lista de habitaciones');
                 }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const randomRecommendations = getRandomRecommendations(data, 10);  // Seleccionamos 10 habitaciones aleatorias
-                setRecommendations(randomRecommendations);  // Guardamos las habitaciones seleccionadas en el estado
-            } else {
-                console.error('Error al obtener las habitaciones');
+            } catch (error) {
+                console.error('Error al mostrar habitaciones', error);
+                setError('Ocurrió un error al conectar con el servidor');
             }
-        } catch (error) {
-            console.error('Error al conectar con el servidor:', error);
-        }
-    };
 
-    // Función para seleccionar N recomendaciones aleatorias sin repetir
-    const getRandomRecommendations = (recommendations, count) => {
-        // Barajamos el array de habitaciones
-        const shuffled = recommendations.sort(() => 0.5 - Math.random());
-        // Tomamos los primeros 'count' elementos
-        return shuffled.slice(0, count);
-    };
 
-    // Hacer la solicitud al cargar el componente
-    useEffect(() => {
-        fetchRecommendations();
-    }, []); // [] asegura que esto solo se ejecute una vez al cargar el componente
+        };
 
-    return (
-        <section className="recommendations-section">
-            <h2>Recomendaciones</h2>
-            <div className="product-grid">
-                {recommendations.length > 0 ? (
-                    recommendations.map((recommendation) => (
-                        <div key={recommendation.id} className="product-card">
-                            <img
-                                src={`/images/${recommendation.imageUrl}`} alt={"imagen"}
-                            />
-                            <h3>{recommendation.name}</h3>
-                        </div>
-                    ))
+        // Usamos useEffect para llamar a la función al cargar el componente
+        useEffect(() => {
+            listRooms();
+        }, []);  // El arreglo vacío asegura que solo se ejecute una vez cuando se carga el componente
+
+        return (
+            <div>
+                <h2>Lista de Habitaciones</h2>
+                {error && <p>{error}</p>} {/* Mostrar errores si los hay */}
+
+                {rooms.length === 0 ? (
+                    <p>No hay habitaciones disponibles</p>
                 ) : (
-                    <p>No hay recomendaciones disponibles</p> // Mensaje en caso de que no haya productos
+                    <ul>
+                        {rooms.map((room) => (
+                            <li key={room.id}>
+                                <h3>{room.name}</h3>
+                                <p>{room.description}</p>
+                                {room.images && room.images.length > 0 ? (
+                                    room.images.map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={`data:image/jpeg;base64,${image.data}`}  // Ya en base64
+                                            alt={`Imagen de la habitación ${index + 1}`}
+                                            width="200px"
+                                            height="150px"
+                                        />
+                                    ))
+                                ) : (
+                                    <p>No hay imágenes disponibles</p>
+                                )}
+
+                            </li>
+                        ))}
+                    </ul>
                 )}
             </div>
-        </section>
-    );
-};
+        );
+
+    }
+
+}
 
 export default RecommendationsSection;

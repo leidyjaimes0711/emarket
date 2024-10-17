@@ -16,6 +16,10 @@ public class RoomService {
 
     // Guardar o actualizar una habitación
     public Room save(Room room){
+        Optional<Room> existingRoom = roomRepository.findByName(room.getName());
+        if (existingRoom.isPresent()) {
+            throw new IllegalArgumentException("El nombre de la habitación ya está en uso");
+        }
         return roomRepository.save(room);  // Guardar o actualizar
     }
 

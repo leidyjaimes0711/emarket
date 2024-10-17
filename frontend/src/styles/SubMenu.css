@@ -1,40 +1,55 @@
 /* Estilos generales para el contenedor del SubMenu */
 .submenu {
-    background-color: #f0f0f0;
-    padding: 20px;
+    background-color: #2f3e4d; /* Fondo del submenú usando un tono intermedio oscuro */
+    padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
-    max-width: 600px;
-    margin: 20px auto; /* Centra el SubMenu */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
     text-align: center;
+    color: #f0f0f0;
 }
 
 /* Estilos para los botones del SubMenu */
 .admin-options {
     display: flex;
-    justify-content: space-between;
-    gap: 15px; /* Espacio entre los botones */
-    margin-bottom: 20px; /* Separación entre los botones y los componentes de creación/lista */
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .admin-options .btn {
-    background-color: #4CAF50; /* Color verde para los botones */
+    background-color: #4a90e2; /* Color de botón acorde a tu paleta */
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    flex: 1; /* Hace que todos los botones tengan el mismo tamaño */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Pequeña sombra en los botones */
-}
+    transition: background-color 0.3s ease;
+    font-size: 16px;}
 
 /* Efecto de hover en los botones */
-.admin-options .btn:hover {
-    background-color: #45a049; /* Verde más oscuro en hover */
+.btn:hover {
+    background-color: #3a78c0; /* Color del botón al pasar el cursor */
     transform: translateY(-2px); /* Efecto de elevar ligeramente los botones en hover */
 }
 
+.admin-options .btn:active {
+    background-color: #2f5e99; /* Color al hacer clic */
+}
 
 
+.body-admin-options {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #1e2a38; /* Fondo del cuerpo usando el color más oscuro */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.body-admin-options h3 {
+    color: #b0c4de; /* Color de texto claro */
+}
+
+.body-admin-options p {
+    color: #f0f0f0;
+}

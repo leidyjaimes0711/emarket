@@ -1,79 +1,127 @@
-/*.color1 { #2672d8 }; azul normal
-.color2 { #8eb6eb }; azul claro
-.color3 { #0c2444 }; azul oscuro
-.color4 { #6c798c }; gris oscuro
-.color5 { #b7b9c0 }; gris claro
-*/
+/* Variables de color */
+:root {
+    --color1: #2672d8; /* Azul normal */
+    --color2: #8eb6eb; /* Azul claro */
+    --color3: #0c2444; /* Azul oscuro */
+    --color4: #6c798c; /* Gris oscuro */
+    --color5: #b7b9c0; /* Gris claro */
+    --header-bg: #0e2442; /* Azul casi negro */
+    --text-white: #ffffff; /* Texto blanco */
+}
+
+/* Estilos generales del header */
 .header {
-    width: 100%;
-    position: fixed; /* Fijo en la parte superior */
+    width: 98%;
+    position: fixed;
     top: 0;
     left: 0;
     height: 80px;
-    background-color: #0e2442; /*azul casi negro */
-    color: #ffffff; /* Texto blanco */
+    background-color: var(--header-bg);
+    color: var(--text-white);
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en otra línea si no hay suficiente espacio */
+
+    padding: 0 20px; /* Espacio a los lados */
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: all 0.3s ease-in-out;
 }
 
+/* Logo */
 .header__logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
-   }
-
-.header__logo h3{
-    font-style: italic;
-
-}
-.logo_container{
-    background-color: yellow;
-    display: flex;
-    align-items: center; /* Alinear el logo verticalmente */
-    padding-right: 10px; /* Espacio entre logo y título */
+    gap: 10px; /* Espacio entre imagen y título */
 }
 
-.title_container{
-    background-color: cornsilk;
-    display: flex;
-    align-items: center; /* Alinear el texto verticalmente */
-}
-
-.header__logo a{
-    display: inherit;
-    align-items: inherit;
-    text-decoration: none; /* Quitar subrayado */
-    color: inherit; /* Mantener el color del texto */
-}
 .header__logo img {
     width: 50px;
     height: auto;
-    margin-right: 10px;
 }
 
+.header__logo h3 {
+    font-style: italic;
+    margin: 0; /* Eliminar el margen */
+}
+
+.header__logo a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Navegación */
+.header__nav {
+    display: flex;
+    gap: 20px; /* Espacio entre botones */
+    flex-shrink: 1; /* Permitir que los botones se adapten cuando haya menos espacio */
+    min-width: 0; /* Evitar que se desborde el contenido */
+}
+
+/* Botones */
 .header__nav .btn {
-    background-color: #8eb6eb ;
-    color: white; /* Texto blanco */
-    font-size: medium;
+    background-color: var(--color2);
+    color: var(--text-white);
+    font-size: 16px;
     border: none;
-    padding: 10px;
+    padding: 10px 20px; /* Ajuste de padding para mejor responsividad */
     border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    gap: 30px; /* Espacio entre los botones */
-
 }
+
 .header__nav .btn:hover {
     background-color: #6a9edb;
 }
 
-/* Ajuste del espacio entre los botones */
-.header__nav {
-    display: flex;
-    gap: 30px;
+/* Media Queries para diferentes resoluciones */
+/* Tablets y dispositivos medianos */
+@media (max-width: 768px) {
+    .header {
+        height: 70px;
+        padding: 0 15px;
+    }
 
+    .header__logo h3 {
+        font-size: 18px;
+    }
+
+    .header__nav {
+        gap: 15px;
+    }
+
+    .header__nav .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+}
+
+/* Ajuste para móviles y dispositivos pequeños */
+@media (max-width: 480px) {
+    .header {
+        height: auto; /* Permitir que el header crezca si es necesario */
+        padding: 0 10px;
+        justify-content: flex-end; /* Alinear los elementos a la derecha */
+
+    }
+
+    .header__logo {
+        margin-right: auto; /* Dejar que el logo se alinee a la izquierda */
+    }
+
+    .header__nav .btn {
+        padding: 6px 12px; /* Ajustar el padding para botones más pequeños */
+        font-size: 12px;
+    }
+
+    .header__nav {
+        gap: 10px; /* Mantener un poco de espacio entre botones */
+    }
+
+    .header__nav .btn {
+        white-space: nowrap; /* Evitar que el texto del botón se divida en dos líneas */
+    }
 }

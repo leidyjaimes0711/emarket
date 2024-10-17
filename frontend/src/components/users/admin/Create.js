@@ -1,56 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import '../../../styles/Create.css';
+
 const Create = () => {
-    // Constantes para almacenar los datos del formulario
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [images, setImages] = useState([]);  // Nueva constante para las imágenes
+    const [images, setImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
     const [error, setError] = useState('');
+    const fileInputRef = useRef(null);
 
-    // Función para manejar la selección de imágenes
     const handleImageChange = (e) => {
-        setImages(e.target.files);  // Almacena las imágenes seleccionadas en el estado
+        const selectedFiles = Array.from(e.target.files);
+        const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
+        setImages(selectedFiles);
+        setPreviewImages(previewURLs);
     };
 
-    // Función para guardar los datos al dar click al botón guardar
     const addRoomForm = async (e) => {
         e.preventDefault();
 
-        // Validar que los campos del formulario no estén vacíos
+        // Validación del formulario
         if (!name || !description) {
             setError('Todos los campos son obligatorios');
             return;
         }
 
-        // Crear un FormData para enviar los datos del formulario y las imágenes
+        if (images.length === 0) {
+            setError('Debe seleccionar al menos una imagen');
+            return;
+        }
+
+        // Crear el FormData
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
+        images.forEach((image) => formData.append('images', image));
 
-        // Agregar todas las imágenes seleccionadas al FormData
-        for (let i = 0; i < images.length; i++) {
-            formData.append('images', images[i]);
-        }
-
-        // Hacer la petición al backend
         try {
             const response = await fetch('http://localhost:8080/api/rooms', {
                 method: 'POST',
-                body: formData,  // Enviar el FormData en lugar de JSON
+                body: formData,
             });
 
-            if (response.ok) {
-                alert('Habitación agregada con éxito');
-                setName('');
-                setDescription('');
-                setImages([]);  // Limpiar imágenes después de subir
-            } else {
-                const result = await response.json();
-                setError(result.message || 'Error al agregar la habitación');
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
             }
+
+            alert('Habitación agregada con éxito');
+            resetForm();
+
         } catch (error) {
-            console.error('Error al crear el registro', error);
-            setError('Ocurrió un error al conectar con el servidor');
+            handleBackendError(error);
+        }
+    };
+
+    const resetForm = () => {
+        setName('');
+        setDescription('');
+        setImages([]);
+        setPreviewImages([]);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+        setError(''); // Limpiar el mensaje de error después de resetear el formulario
+    };
+
+    const handleBackendError = (error) => {
+        if (error.message.includes('nombre de la habitación ya está en uso')) {
+            setError('Lo sentimos, el nombre de la habitación ya está en uso. Por favor, elige otro.');
+        } else {
+            setError('Ocurrió un error. Por favor, intenta de nuevo.');
         }
     };
 
@@ -58,22 +78,40 @@ const Create = () => {
         <form onSubmit={addRoomForm}>
             <h2>Agregar Habitación</h2>
             {error && <p className="error-message">{error}</p>}
+
             <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Nombre"
             />
+
             <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Descripción"
             />
+
             <input
                 type="file"
-                multiple  // Permitir subir múltiples imágenes
-                onChange={handleImageChange}  // Llamar a la función cuando se seleccionan imágenes
+                multiple
+                onChange={handleImageChange}
+                ref={fileInputRef}
             />
+
+            <div className="image-preview-container">
+                {previewImages.length > 0 && previewImages.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image}
+                        alt={`Vista previa ${index + 1}`}
+                        className="image-preview"
+                        width="150px"
+                        height="150px"
+                    />
+                ))}
+            </div>
+
             <button type="submit">Agregar habitación</button>
         </form>
     );
