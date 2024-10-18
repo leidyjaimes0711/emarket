@@ -1,4 +1,3 @@
-
 import '../../styles/RecommendationsSection.css';
 import React, { useState, useEffect } from 'react';
 import RoomDetail from "../users/client/RoomDetail.js";
@@ -56,24 +55,19 @@ const RecommendationsSection = () => {
                             <h3>{room.name}</h3>
                             <p>{room.description}</p>
 
-
                             {room.images && room.images.length > 0 ? (
-                                room.images.map((image, index) => (
+                                <div className="images-container">
                                     <img
-                                        key={index}
-                                        src={`data:image/jpeg;base64,${image.data}`}
-                                        alt={`Imagen de la habitación ${index + 1}`}
-                                        width="200px"
-                                        height="150px"
+                                        src={`data:image/jpeg;base64,${room.images[0].data}`}
+                                        alt={`Primera imagen de la habitación`}
                                     />
-                                ))
+                                </div>
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
                             <button onClick={() => toggleRoomDetailComponent(room.id)}>
-                                {selectedRoomId === room.id ? 'Ocultar detalles' : 'Ver detalles'}
+                                {selectedRoomId === room.id ? 'Ver menos' : 'Ver más'}
                             </button>
-
 
                             {/* Mostrar RoomDetail si la habitación está seleccionada */}
                             {selectedRoomId === room.id && (

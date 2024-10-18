@@ -16,26 +16,27 @@
 
 .grid-item img {
     display: block;
-    margin: 0 auto 10px;
+    margin: 0 auto;
+    width: 100%;
+    height: auto;
 }
 
 
-.grid-item p {
-    margin: 10px 0;
-}
 
-.grid-item button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 50%; /* Hacer que el botón ocupe todo el ancho debajo de la imagen */
-}
+
 
 .grid-item button:hover {
     background-color: #0056b3;
 }
 
+.images-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Espacio entre las imágenes */
+}
+
+.images-container img {
+    width: 48%;
+     /* Para que ambas imágenes ocupen el 48% del ancho del contenedor */
+    border-radius: 5px; /* Para redondear un poco las esquinas */
+}

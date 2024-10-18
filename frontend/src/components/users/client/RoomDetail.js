@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../../../styles/RoomDetail.css';  // Importamos el archivo CSS para estilos
+import '../../../styles/RoomDetail.css'; // Importamos el archivo CSS para estilos
 
 const RoomDetail = ({ roomId, onClose }) => {
     const [room, setRoom] = useState(null);
@@ -39,22 +39,31 @@ const RoomDetail = ({ roomId, onClose }) => {
             ) : (
                 room && (
                     <div>
-                        <div className="arrow" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <h2 className="room-title">{room.name}</h2>
-                        </div>
+                        <h2 className="room-title">{room.name}</h2>
                         <p>{room.description}</p>
-                        {room.images && room.images.length > 0 ? (
-                            room.images.map((image, index) => (
-                                <img
-                                    key={index}
-                                    src={`data:image/jpeg;base64,${image.data}`}
-                                    alt={`Imagen de la habitación ${index + 1}`}
-                                    width="300px"
-                                    height="200px"
-                                />
-                            ))
+
+                        {room.images && room.images.length >= 5 ? (
+                            <div className="image-grid">
+                                <div className="large-image">
+                                    <img
+                                        src={`data:image/jpeg;base64,${room.images[0].data}`}
+                                        alt="Imagen principal de la habitación"
+                                        className="room-image-large"
+                                    />
+                                </div>
+                                <div className="small-images">
+                                    {room.images.slice(1, 5).map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={`data:image/jpeg;base64,${image.data}`}
+                                            alt={`Imagen adicional ${index + 1}`}
+                                            className="room-image-small"
+                                        />
+                                    ))}
+                                </div>
+                            </div>
                         ) : (
-                            <p>No hay imágenes disponibles</p>
+                            <p>No hay suficientes imágenes disponibles</p>
                         )}
                     </div>
                 )
