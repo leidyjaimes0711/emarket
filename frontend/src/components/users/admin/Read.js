@@ -1,12 +1,34 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Read.css';
+
 const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
-    const [editingRoom, setEditingRoom] = useState(null); // Estado para la habitación que se va a editar
+    const [editingRoom, setEditingRoom] = useState(null);
+    const [originalName, setOriginalName] = useState(''); // Guardamos el nombre original
+    const [newImages, setNewImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
+    const fileInputRef = useRef(null);
 
+    const handleImageChange = (e) => {
+        const selectedFiles = Array.from(e.target.files);
+        const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
+        setNewImages((prevImages) => [...prevImages, ...selectedFiles]);
+        setPreviewImages((prevPreviews) => [...prevPreviews, ...previewURLs]);
+    };
 
-    // Función para listar las habitaciones al cargar la página
+    const removeImage = (index) => {
+        setNewImages(newImages.filter((_, i) => i !== index));
+        setPreviewImages(previewImages.filter((_, i) => i !== index));
+    };
+
+    const removeExistingImage = (imageId) => {
+        setEditingRoom({
+            ...editingRoom,
+            images: editingRoom.images.filter((image) => image.id !== imageId),
+        });
+    };
+
     const listRooms = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/rooms', {
@@ -14,7 +36,6 @@ const Read = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);  // Verifica si los datos están llegando
                 setRooms(data);
             } else {
                 setError('Error al obtener la lista de habitaciones');
@@ -25,15 +46,13 @@ const Read = () => {
         }
     };
 
-
-    // Función para eliminar una habitación
     const deleteRoom = async (roomId) => {
         try {
             const response = await fetch(`http://localhost:8080/api/rooms/${roomId}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
-                setRooms(rooms.filter(room => room.id !== roomId));  // Actualiza la lista después de eliminar
+                setRooms(rooms.filter(room => room.id !== roomId));
             } else {
                 setError('Error al eliminar la habitación');
             }
@@ -43,25 +62,38 @@ const Read = () => {
         }
     };
 
-
-    // Función para manejar la edición de una habitación
     const handleEdit = (room) => {
-        setEditingRoom(room);  // Establece la habitación que será editada
+        setEditingRoom(room);
+        setOriginalName(room.name); // Guardamos el nombre original cuando iniciamos la edición
+        setPreviewImages([]); // Limpia las vistas previas
+        setNewImages([]); // Limpia las nuevas imágenes
     };
 
-    // Función para enviar los datos editados
     const saveEditRoom = async (room) => {
+        const formData = new FormData();
+
+        if (newImages.length > 0) {
+            newImages.forEach((image) => {
+                formData.append('images', image);
+            });
+        }
+
+        const updatedRoom = {
+            ...room,
+            name: editingRoom.name,
+            description: editingRoom.description,
+        };
+
+        formData.append('room', JSON.stringify(updatedRoom));
+
         try {
             const response = await fetch(`http://localhost:8080/api/rooms/${room.id}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(room)
+                body: formData
             });
             if (response.ok) {
-                listRooms();  // Actualiza la lista después de editar
-                setEditingRoom(null);  // Cierra el formulario de edición
+                listRooms();
+                setEditingRoom(null);
             } else {
                 setError('Error al guardar los cambios');
             }
@@ -71,15 +103,14 @@ const Read = () => {
         }
     };
 
-    // Usamos useEffect para llamar a la función al cargar el componente
     useEffect(() => {
         listRooms();
-    }, []);  // El arreglo vacío asegura que solo se ejecute una vez cuando se carga el componente
+    }, []);
 
     return (
         <div>
             <h2>Lista de Habitaciones</h2>
-            {error && <p>{error}</p>} {/* Mostrar errores si los hay */}
+            {error && <p>{error}</p>}
 
             {rooms.length === 0 ? (
                 <p>No hay habitaciones disponibles</p>
@@ -91,19 +122,20 @@ const Read = () => {
                             <p>{room.description}</p>
                             {room.images && room.images.length > 0 ? (
                                 room.images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={`data:image/jpeg;base64,${image.data}`}  // Ya en base64
-                                        alt={`Imagen de la habitación ${index + 1}`}
-                                        width="200px"
-                                        height="150px"
-                                    />
+                                    <div key={index}>
+                                        <img
+                                            src={`data:image/jpeg;base64,${image.data}`}
+                                            alt={`Imagen de la habitación ${index + 1}`}
+                                            width="200px"
+                                            height="150px"
+                                        />
+                                    </div>
                                 ))
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
-                            <button onClick={() => handleEdit(room)}>Editar</button> {/* Botón de editar */}
-                            <button onClick={() => deleteRoom(room.id)}>Eliminar</button> {/* Botón eliminar */}
+                            <button onClick={() => handleEdit(room)}>Editar</button>
+                            <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
                         </li>
                     ))}
                 </ul>
@@ -111,37 +143,33 @@ const Read = () => {
 
             {editingRoom && (
                 <div className="edit-form">
-                    <h3>Editando Habitación: {editingRoom.name}</h3>
+                    {/* Usa el nombre original de `editingRoom` en el título sin que cambie */}
+                    <h3>Editando Habitación: {originalName}</h3>
                     <form onSubmit={(e) => {
                         e.preventDefault();
                         saveEditRoom(editingRoom);
                     }}>
-                        <label>
-                            Nombre:
+                        <label>Nombre:
                             <input
+                                placeholder="Nombre"
                                 type="text"
-                                value={editingRoom.name}
-                                onChange={(e) => setEditingRoom({ ...editingRoom, name: e.target.value })}
+                                value={editingRoom.name || ""}
+                                onChange={(e) => setEditingRoom({...editingRoom, name: e.target.value})}
                             />
                         </label>
-                        <label>
-                            Descripción:
+                        <label>Descripción:
                             <input
                                 type="text"
-                                value={editingRoom.description}
-                                onChange={(e) => setEditingRoom({ ...editingRoom, description: e.target.value })}
+                                value={editingRoom.description || ""}
+                                onChange={(e) => setEditingRoom({...editingRoom, description: e.target.value})}
                             />
                         </label>
-                        <button type="submit">Guardar</button>
+
+                        <button type="submit">Guardar habitación</button>
                         <button type="button" onClick={() => setEditingRoom(null)}>Cancelar</button>
                     </form>
                 </div>
             )}
-
-
-
-
-
         </div>
     );
 };

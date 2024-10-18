@@ -6,8 +6,12 @@ import com.dh.emarket.model.Room;
 import com.dh.emarket.repository.RoomRepository;
 import com.dh.emarket.service.ImageService;
 import com.dh.emarket.service.RoomService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,7 +73,7 @@ public class RoomController {
         return ResponseEntity.ok(room);  // Si la habitación se encuentra, retornamos 200 OK con la habitación
     }
 
-    // endpoint para subir varias imagenes a una habitación
+    // endpoint para subir varias imagenes a una habitación________________
     @PostMapping("/{roomId}/images")
     public ResponseEntity<?> uploadImages(
             @PathVariable Long roomId,
@@ -168,15 +172,51 @@ public class RoomController {
 
 
     // Endpoint para actualizar una habitación por ID___________________________________
-    @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        Room updatedRoom = roomService.update(id, roomDetails);
-        if (updatedRoom != null) {
-            return ResponseEntity.ok(updatedRoom);  // 200 OK si se actualiza correctamente
-        } else {
-            return ResponseEntity.notFound().build();  // 404 Not Found si la habitación no existe
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateRoom(
+            @PathVariable Long id,
+            @RequestPart("room") String roomJson,  // El JSON de la habitación en forma de String
+            @RequestPart(value = "images", required = false) MultipartFile[] images  // Las nuevas imágenes (opcional)
+    ) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Room room;
+
+        try {
+            // Convertimos el JSON recibido de la habitación a un objeto
+            room = objectMapper.readValue(roomJson, Room.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Error al procesar JSON de la habitación");
+        }
+
+        // Intentamos actualizar la habitación
+        try {
+            Room updatedRoom = roomService.update(id, room); // Usamos el método de actualización
+
+            // Si se reciben nuevas imágenes, las procesamos
+            if (images != null && images.length > 0) {
+                processImages(images, updatedRoom);  // Extraemos la lógica de imágenes a un método separado
+            }
+
+            return ResponseEntity.ok(updatedRoom);  // Devolvemos la habitación actualizada
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar las imágenes");
         }
     }
+
+    // Método para procesar y agregar imágenes a la habitación
+    private void processImages(MultipartFile[] images, Room room) throws IOException {
+        for (MultipartFile image : images) {
+            Image newImage = new Image();
+            newImage.setFileName(image.getOriginalFilename());
+            newImage.setFileType(image.getContentType());
+            newImage.setData(image.getBytes());
+            room.addImage(newImage);  // Agregamos la nueva imagen
+        }
+        roomService.save(room);  // Guardamos las imágenes en la habitación
+    }
+
 
 
 }

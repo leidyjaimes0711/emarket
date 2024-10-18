@@ -42,28 +42,27 @@ const RoomDetail = ({ roomId, onClose }) => {
                         <h2 className="room-title">{room.name}</h2>
                         <p>{room.description}</p>
 
-                        {room.images && room.images.length >= 5 ? (
-                            <div className="image-grid">
-                                <div className="large-image">
-                                    <img
-                                        src={`data:image/jpeg;base64,${room.images[0].data}`}
-                                        alt="Imagen principal de la habitación"
-                                        className="room-image-large"
-                                    />
-                                </div>
-                                <div className="small-images">
-                                    {room.images.slice(1, 5).map((image, index) => (
+                        {room.images && room.images.length > 0 ? (
+                            <div className={`image-grid image-grid-${room.images.length}`}>
+                                {room.images.map((image, index) => (
+                                    <div
+                                        key={index}
+                                        className={`image-item ${
+                                            index === 0 ? 'large-image' : 'small-image'
+                                        }`}
+                                    >
                                         <img
-                                            key={index}
                                             src={`data:image/jpeg;base64,${image.data}`}
-                                            alt={`Imagen adicional ${index + 1}`}
-                                            className="room-image-small"
+                                            alt={`Imagen ${index + 1}`}
+                                            className={`room-image ${
+                                                index === 0 ? 'room-image-large' : 'room-image-small'
+                                            }`}
                                         />
-                                    ))}
-                                </div>
+                                    </div>
+                                ))}
                             </div>
                         ) : (
-                            <p>No hay suficientes imágenes disponibles</p>
+                            <p>No hay imágenes disponibles</p>
                         )}
                     </div>
                 )

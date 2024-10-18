@@ -2,6 +2,7 @@ package com.dh.emarket.service;
 
 import com.dh.emarket.model.Room;
 import com.dh.emarket.repository.RoomRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,17 +32,15 @@ public class RoomService {
 
     // Método para actualizar una habitación
     public Room update(Long id, Room roomDetails) {
-        Optional<Room> roomOptional = roomRepository.findById(id);
-        if (roomOptional.isPresent()) {
-            Room room = roomOptional.get();
+        return roomRepository.findById(id).map(room -> {
+            // Actualizamos los datos de la habitación con los nuevos detalles
             room.setName(roomDetails.getName());
             room.setDescription(roomDetails.getDescription());
-            // Aquí puedes agregar más campos para actualizar si es necesario
+            // Si tu entidad tiene más atributos, también debes actualizarlos aquí
             return roomRepository.save(room);
-        } else {
-            return null;  // Si la habitación no existe, retornamos null
-        }
+        }).orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found"));
     }
+
 
 
     // Listar todas las habitaciones
