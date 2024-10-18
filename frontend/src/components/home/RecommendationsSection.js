@@ -55,9 +55,7 @@ const RecommendationsSection = () => {
                         <div className="grid-item" key={room.id}>
                             <h3>{room.name}</h3>
                             <p>{room.description}</p>
-                            <button onClick={() => toggleRoomDetailComponent(room.id)}>
-                                {selectedRoomId === room.id ? 'Ocultar detalles' : 'Ver detalles'}
-                            </button>
+
 
                             {room.images && room.images.length > 0 ? (
                                 room.images.map((image, index) => (
@@ -72,6 +70,10 @@ const RecommendationsSection = () => {
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
+                            <button onClick={() => toggleRoomDetailComponent(room.id)}>
+                                {selectedRoomId === room.id ? 'Ocultar detalles' : 'Ver detalles'}
+                            </button>
+
 
                             {/* Mostrar RoomDetail si la habitación está seleccionada */}
                             {selectedRoomId === room.id && (

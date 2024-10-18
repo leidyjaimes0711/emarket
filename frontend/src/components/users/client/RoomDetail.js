@@ -41,7 +41,6 @@ const RoomDetail = ({ roomId, onClose }) => {
                     <div>
                         <div className="arrow" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <h2 className="room-title">{room.name}</h2>
-                            <button onClick={onClose}>Cerrar</button>
                         </div>
                         <p>{room.description}</p>
                         {room.images && room.images.length > 0 ? (
