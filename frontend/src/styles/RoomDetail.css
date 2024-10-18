@@ -1,0 +1,23 @@
+.room-detail-container {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;  /* Distribuye el título a la izquierda y la flecha a la derecha */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.room-title {
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.arrow{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

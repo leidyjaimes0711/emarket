@@ -49,7 +49,7 @@ public class RoomController {
         return ResponseEntity.ok(rooms);
     }
 
-    // endpoint para mostrar 1 habitacion por id
+    // endpoint para mostrar 1 habitacion por id ____________________________________
 
     // Custom Exception
     @ResponseStatus(HttpStatus.NOT_FOUND)  // Retorna un 404 cuando no se encuentra la habitación
@@ -58,7 +58,9 @@ public class RoomController {
             super(message);
         }
     }
-    // Endpoint para obtener una habitación por id
+
+
+    // Endpoint para obtener una habitación por id _______________________________
     @GetMapping("/{roomId}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
         Room room = roomService.findById(roomId)

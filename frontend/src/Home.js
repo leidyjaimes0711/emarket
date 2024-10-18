@@ -7,24 +7,21 @@ import '../src/Home.css';
 import Create from "./components/users/admin/Create.js";
 import React from 'react';
 import LoginPanel from "./components/login/LoginPanel.js";
+import RoomDetail from "./components/users/client/RoomDetail.js";
+import RecommendationsSection from "./components/home/RecommendationsSection.js";
 function Home() {
 
     return (
         <Router>
             <div className="app">
-                <Header />
+                <Header /> {/* El header se mostrará en todas las páginas */}
                 <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <>
-                                <Body />
-                            </>
-                        }/>
                     <Route path="/" element={<Body />} />
                     <Route path="/adminMenu" element={<Menu />} />
                     <Route path="/addRoom" element={<Create />} />
                     <Route path="/loginPanel" element={<LoginPanel />} />
+                    <Route path="/" element={<RecommendationsSection />} />
+                    <Route path="/room/:id" element={<RoomDetail />} />
                 </Routes>
                 <Footer />
             </div>

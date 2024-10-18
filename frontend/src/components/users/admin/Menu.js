@@ -20,8 +20,6 @@ const Menu = () => {
                 <button className="btn" onClick={toggleSubMenuComponent}>
                     Gestionar Habitaciones
                 </button>
-
-
             </div>
                 {showSubMenu && <SubMenu />}
         </div>
