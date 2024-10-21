@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../../styles/Read.css';
 
 const Read = () => {
@@ -7,27 +7,6 @@ const Read = () => {
     const [editingRoom, setEditingRoom] = useState(null);
     const [originalName, setOriginalName] = useState(''); // Guardamos el nombre original
     const [newImages, setNewImages] = useState([]);
-    const [previewImages, setPreviewImages] = useState([]);
-    const fileInputRef = useRef(null);
-
-    const handleImageChange = (e) => {
-        const selectedFiles = Array.from(e.target.files);
-        const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
-        setNewImages((prevImages) => [...prevImages, ...selectedFiles]);
-        setPreviewImages((prevPreviews) => [...prevPreviews, ...previewURLs]);
-    };
-
-    const removeImage = (index) => {
-        setNewImages(newImages.filter((_, i) => i !== index));
-        setPreviewImages(previewImages.filter((_, i) => i !== index));
-    };
-
-    const removeExistingImage = (imageId) => {
-        setEditingRoom({
-            ...editingRoom,
-            images: editingRoom.images.filter((image) => image.id !== imageId),
-        });
-    };
 
     const listRooms = async () => {
         try {
@@ -65,10 +44,31 @@ const Read = () => {
             }
         }
     };
+
+    const deleteImage = async (roomId, imageId) => {
+        const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta imagen?');
+
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/rooms/${roomId}/images/${imageId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    // Refrescamos la lista de habitaciones para reflejar los cambios
+                    listRooms();
+                } else {
+                    setError('Error al eliminar la imagen');
+                }
+            } catch (error) {
+                console.error('Error al eliminar la imagen', error);
+                setError('Ocurrió un error al conectar con el servidor');
+            }
+        }
+    };
+
     const handleEdit = (room) => {
         setEditingRoom(room);
         setOriginalName(room.name); // Guardamos el nombre original cuando iniciamos la edición
-        setPreviewImages([]); // Limpia las vistas previas
         setNewImages([]); // Limpia las nuevas imágenes
     };
 
@@ -132,6 +132,7 @@ const Read = () => {
                                             width="200px"
                                             height="150px"
                                         />
+                                        <button onClick={() => deleteImage(room.id, image.id)}>Eliminar imagen</button>
                                     </div>
                                 ))
                             ) : (

@@ -1,7 +1,9 @@
 package com.dh.emarket.service;
 
+import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
 import com.dh.emarket.repository.RoomRepository;
+import com.dh.emarket.repository.ImageRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,9 @@ public class RoomService {
 
     @Autowired
     private RoomRepository roomRepository;
+    @Autowired
+    private ImageRepository imageRepository;
+
 
     // Guardar o actualizar una habitación
     public Room save(Room room){
@@ -52,4 +57,33 @@ public class RoomService {
     public Optional<Room> findById(Long id) {
         return roomRepository.findById(id);  // Buscar por ID
     }
+
+
+    //método para eliminar una imagen existente de una habitación existente
+
+    public void deleteRoomImage(Long roomId, Long imageId) throws Exception {
+        // Buscar la habitación por su ID
+        Optional<Room> roomOptional = roomRepository.findById(roomId);
+        if (roomOptional.isPresent()) {
+            Room room = roomOptional.get();
+
+            // Buscar la imagen en la lista de imágenes de la habitación
+            Image imageToRemove = room.getImages().stream()
+                    .filter(image -> image.getId().equals(imageId))
+                    .findFirst()
+                    .orElseThrow(() -> new Exception("Imagen no encontrada"));
+
+            // Remover la imagen de la lista
+            room.getImages().remove(imageToRemove);
+
+            // Guardar los cambios en la base de datos
+            roomRepository.save(room);
+
+            // Eliminar la imagen de la base de datos si es necesario
+            imageRepository.deleteById(imageId);
+        } else {
+            throw new Exception("Habitación no encontrada");
+        }
+    }
+
 }

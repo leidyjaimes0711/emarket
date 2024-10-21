@@ -218,5 +218,16 @@ public class RoomController {
     }
 
 
+    //método para eliminar una imagen existente de una habitación existente
+    @DeleteMapping("/{roomId}/images/{imageId}")
+    public ResponseEntity<Void> deleteRoomImage(@PathVariable Long roomId, @PathVariable Long imageId) {
+        try {
+            roomService.deleteRoomImage(roomId, imageId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
