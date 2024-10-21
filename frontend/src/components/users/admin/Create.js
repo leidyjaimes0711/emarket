@@ -67,13 +67,35 @@ const Create = () => {
     };
 
     const handleBackendError = (error) => {
-        if (error.message.includes('nombre de la habitación ya está en uso')) {
+        if (error.message.includes('')) {
             setError('Lo sentimos, el nombre de la habitación ya está en uso. Por favor, elige otro.');
         } else {
-            setError('Ocurrió un error. Por favor, intenta de nuevo.');
         }
     };
 
+    const handleSubmit = async (roomData) => {
+        try {
+            const response = await fetch('/api/rooms/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(roomData),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text(); // Esto obtiene el mensaje de error del backend
+                throw new Error(errorMessage);
+            }
+
+            const result = await response.json();
+            // Mostrar el mensaje de éxito o hacer algo con la respuesta
+        } catch (error) {
+            // Aquí puedes mostrar el mensaje al usuario
+            console.error(error.message);
+            alert(`Error: ${error.message}`);
+        }
+    };
     return (
         <form onSubmit={addRoomForm}>
             <h2>Agregar Habitación</h2>

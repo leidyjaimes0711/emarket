@@ -45,31 +45,14 @@ const Read = () => {
         }
     };
 
-    const deleteImage = async (roomId, imageId) => {
-        const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta imagen?');
-
-        if (confirmDelete) {
-            try {
-                const response = await fetch(`http://localhost:8080/api/rooms/${roomId}/images/${imageId}`, {
-                    method: 'DELETE'
-                });
-                if (response.ok) {
-                    // Refrescamos la lista de habitaciones para reflejar los cambios
-                    listRooms();
-                } else {
-                    setError('Error al eliminar la imagen');
-                }
-            } catch (error) {
-                console.error('Error al eliminar la imagen', error);
-                setError('Ocurrió un error al conectar con el servidor');
-            }
-        }
-    };
-
     const handleEdit = (room) => {
         setEditingRoom(room);
         setOriginalName(room.name); // Guardamos el nombre original cuando iniciamos la edición
         setNewImages([]); // Limpia las nuevas imágenes
+    };
+
+    const handleImageChange = (e) => {
+        setNewImages([...e.target.files]); // Guardar las nuevas imágenes seleccionadas
     };
 
     const saveEditRoom = async (room) => {
@@ -132,13 +115,11 @@ const Read = () => {
                                             width="200px"
                                             height="150px"
                                         />
-                                        <button onClick={() => deleteImage(room.id, image.id)}>Eliminar imagen</button>
                                     </div>
                                 ))
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
-                            <button onClick={() => handleEdit(room)}>Editar</button>
                             <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
                         </li>
                     ))}
@@ -169,6 +150,15 @@ const Read = () => {
                             />
                         </label>
 
+                        <label>Agregar imágenes:
+                            <input
+                                type="file"
+                                multiple
+                                accept="image/*"
+                                onChange={handleImageChange}
+                            />
+                        </label>
+
                         <button type="submit">Guardar habitación</button>
                         <button type="button" onClick={() => setEditingRoom(null)}>Cancelar</button>
                     </form>
@@ -179,3 +169,4 @@ const Read = () => {
 };
 
 export default Read;
+

@@ -21,12 +21,12 @@ public class RoomService {
 
 
     // Guardar o actualizar una habitación
-    public Room save(Room room){
+    public Room save(Room room) {
         Optional<Room> existingRoom = roomRepository.findByName(room.getName());
-        if (existingRoom.isPresent()) {
+        if (existingRoom.isPresent() && !existingRoom.get().getId().equals(room.getId())) {
             throw new IllegalArgumentException("El nombre de la habitación ya está en uso");
         }
-        return roomRepository.save(room);  // Guardar o actualizar
+        return roomRepository.save(room);
     }
 
     // Eliminar una habitación por ID

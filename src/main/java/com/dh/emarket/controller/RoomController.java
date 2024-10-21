@@ -62,9 +62,6 @@ public class RoomController {
             super(message);
         }
     }
-
-
-    // Endpoint para obtener una habitación por id _______________________________
     @GetMapping("/{roomId}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
         Room room = roomService.findById(roomId)
@@ -218,16 +215,6 @@ public class RoomController {
     }
 
 
-    //método para eliminar una imagen existente de una habitación existente
-    @DeleteMapping("/{roomId}/images/{imageId}")
-    public ResponseEntity<Void> deleteRoomImage(@PathVariable Long roomId, @PathVariable Long imageId) {
-        try {
-            roomService.deleteRoomImage(roomId, imageId);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
 
 }
