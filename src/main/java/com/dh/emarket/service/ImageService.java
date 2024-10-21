@@ -65,4 +65,7 @@ public class ImageService {
         // Guardar la habitación actualizada (aunque esto no es estrictamente necesario si la relación es bidireccional y está bien mapeada)
         return roomRepository.save(room);
     }
+
+    public void deleteImagesByIds(List<Long> imageIdsToDelete) {
+    }
 }

@@ -47,21 +47,24 @@ const Read = () => {
     };
 
     const deleteRoom = async (roomId) => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/rooms/${roomId}`, {
-                method: 'DELETE'
-            });
-            if (response.ok) {
-                setRooms(rooms.filter(room => room.id !== roomId));
-            } else {
-                setError('Error al eliminar la habitación');
+        const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta habitación?');
+
+        if (confirmDelete) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/rooms/${roomId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    setRooms(rooms.filter(room => room.id !== roomId));
+                } else {
+                    setError('Error al eliminar la habitación');
+                }
+            } catch (error) {
+                console.error('Error al eliminar la habitación', error);
+                setError('Ocurrió un error al conectar con el servidor');
             }
-        } catch (error) {
-            console.error('Error al eliminar la habitación', error);
-            setError('Ocurrió un error al conectar con el servidor');
         }
     };
-
     const handleEdit = (room) => {
         setEditingRoom(room);
         setOriginalName(room.name); // Guardamos el nombre original cuando iniciamos la edición
