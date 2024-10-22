@@ -1,19 +1,14 @@
 import '../../styles/RecommendationsSection.css';
 import React, { useState, useEffect } from 'react';
-import RoomDetail from "../users/client/RoomDetail.js";
 
 const RecommendationsSection = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
-    const [selectedRoomId, setSelectedRoomId] = useState(null);
 
-    // Función para alternar entre mostrar/ocultar el detalle de la habitación
-    const toggleRoomDetailComponent = (roomId) => {
-        if (selectedRoomId === roomId) {
-            setSelectedRoomId(null); // Ocultar detalles si se hace clic en la misma habitación
-        } else {
-            setSelectedRoomId(roomId); // Mostrar detalles de la habitación seleccionada
-        }
+    // Función para abrir los detalles de la habitación en una nueva pestaña
+    const openRoomDetailsInNewTab = (roomId) => {
+        const newTabUrl = `/room/${roomId}`;  // Ruta a los detalles de la habitación
+        window.open(newTabUrl, '_blank'); // Abre una nueva pestaña
     };
 
     // Función para listar las habitaciones
@@ -65,17 +60,9 @@ const RecommendationsSection = () => {
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
-                            <button onClick={() => toggleRoomDetailComponent(room.id)}>
-                                {selectedRoomId === room.id ? 'Ver menos' : 'Ver más'}
+                            <button onClick={() => openRoomDetailsInNewTab(room.id)}>
+                                Ver más
                             </button>
-
-                            {/* Mostrar RoomDetail si la habitación está seleccionada */}
-                            {selectedRoomId === room.id && (
-                                <RoomDetail
-                                    roomId={room.id}
-                                    onClose={() => setSelectedRoomId(null)} // Función para cerrar el detalle
-                                />
-                            )}
                         </div>
                     ))}
                 </div>

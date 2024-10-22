@@ -4,10 +4,12 @@
 }
 /*titulo de habitacion*/
 .room-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-
+    text-align: left;
+    font-size: 24px; /* Ajusta el tamaño según lo necesites */
+    font-weight: bold; /* También puedes cambiar el peso de la fuente si es necesario */
+    margin-bottom: 20px; /* Ajusta el margen inferior según tu diseño */
 }
+
 /*imagen de habitacion*/
 .room-image {
     width: 100%;  /* La imagen ocupa todo el espacio del contenedor */
@@ -74,4 +76,24 @@
 
 .image-grid-5 .small-image {
     flex: 1 1 25%; /* Las otras cuatro imágenes se ajustan para formar una cuadrícula de 2x2 */
+}
+
+
+
+.back-button {
+    display: inline-block;
+    text-align: right;
+    float: right;  /* Coloca el botón a la derecha */
+    padding: 10px 15px;
+    font-size: 18px;
+    background-color: #007bff; /* Color del botón */
+    color: white;  /* Color del texto */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #0056b3; /* Color al pasar el mouse */
 }
