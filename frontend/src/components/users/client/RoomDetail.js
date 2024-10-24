@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import '../../../styles/RoomDetail.css';
-import '../../../styles/RoomDetail.css';
-
 
 const RoomDetail = () => {
     const { id } = useParams();
@@ -39,7 +37,7 @@ const RoomDetail = () => {
     return (
         <div>
             <h2 className="room-title">{room.name}</h2>
-            <p>{room.description}</p>
+            <p className="room-description">{room.description}</p>
             {room.images && room.images.length > 0 ? (
                 <div className="images-container">
                     {room.images.map((image, index) => (
