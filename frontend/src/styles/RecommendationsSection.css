@@ -40,3 +40,9 @@
      /* Para que ambas imágenes ocupen el 48% del ancho del contenedor */
     border-radius: 5px; /* Para redondear un poco las esquinas */
 }
+
+
+.see-more-button{
+    display: flex;
+    float: right;
+}

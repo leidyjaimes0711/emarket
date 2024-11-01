@@ -24,7 +24,7 @@
     object-fit: cover;  /* Ajuste para que la imagen se recorte bien y no se deforme */
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);  /* Sombra a la imagen */
 }
-/*Grilla con las imagenes de la habitacion__________________________________*/
+/*Grilla con 5 imagenes de la habitacion__________________________________*/
 .images-container {
     display: grid;
     width: 100%;
@@ -67,23 +67,6 @@
     object-fit: cover;
 }
 
-
-/* Para pantallas más pequeñas, hacer que todas las imágenes estén en una sola columna */
-@media (max-width: 768px) {
-    .images-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-    }
-
-    .images-container img {
-        grid-column: 1 / 2;
-        grid-row: auto;
-        width: 100%;
-        height: auto;
-    }
-}
-
-
 /*botón atrás*/
 .back-button {
     display: inline-block;
@@ -101,4 +84,17 @@
 
 .back-button:hover {
     background-color: #0056b3; /* Color al pasar el mouse */
+}
+
+/* Diseño responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    .images-container {
+       display: block;
+    }
+
+    .images-container img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
 }

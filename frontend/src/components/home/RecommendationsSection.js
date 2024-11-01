@@ -60,9 +60,11 @@ const RecommendationsSection = () => {
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
-                            <button onClick={() => openRoomDetailsInNewTab(room.id)}>
+
+                                <button className="see-more-button" onClick={() => openRoomDetailsInNewTab(room.id)}>
                                 Ver más
                             </button>
+
                         </div>
                     ))}
                 </div>
