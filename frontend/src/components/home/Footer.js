@@ -1,14 +1,14 @@
 import React from 'react';
 import '../../styles/Footer.css';
+import logo from '../../assets/logo.png'; // Subes un nivel con ../ y entras en assets
 
 const Footer = () => {
     return (
         <footer className="footer">
-            <p>&copy; 2024 Mi Tienda. Todos los derechos reservados.</p>
-            <div className="footer__social">
-                <a href="#">Facebook</a>
-                <a href="#">Instagram</a>
-                <a href="#">Twitter</a>
+
+            <div className="footer-content">
+                <img src={logo} alt="Logo de la tienda"/>
+                <span className="footer-text">© {new Date().getFullYear()} Mason's. Todos los derechos reservados.</span>
             </div>
         </footer>
     );

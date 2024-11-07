@@ -1,17 +1,51 @@
+:root {
+    --color1: #2672d8; /* Azul normal */
+    --color2: #8eb6eb; /* Azul claro */
+    --color3: #0c2444; /* Azul oscuro */
+    --color4: #6c798c; /* Gris oscuro */
+    --color5: #b7b9c0; /* Gris claro */
+    --footer-bg: #0e2442; /* Azul casi negro */
+    --text-white: #ffffff; /* Texto blanco */
+}
+
+
 .footer {
-    background-color: #1e1e1e; /* Fondo negro casi negro */
+    background-color: var(--footer-bg);
     color: #ffffff; /* Texto blanco */
     text-align: center;
     padding: 20px;
 }
 
-.footer__social a {
-    color: #ffcc00; /* Enlaces en amarillo dorado */
-    margin: 0 10px;
-    text-decoration: none;
-    transition: color 0.3s ease;
+.footer-content {
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
 }
 
-.footer__social a:hover {
-    color: #ff3b30; /* Cambia a rojo en hover */
+.footer-content img {
+    height: 40px;
+    margin-right: 15px;
+}
+
+/* Responsividad ___________________________________________________ */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-content img {
+        margin: 0 auto 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 15px;
+    }
+    .footer-text {
+        font-size: 0.8em;
+    }
+    .footer-content img {
+        height: 30px;
+    }
 }

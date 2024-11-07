@@ -15,10 +15,10 @@ const Menu = () => {
         <div className="menu">
             <h2>Panel de administración</h2>
             <div className="admin-options">
-                <button className="btn">Gestionar Reservas</button>
-                <button className="btn">Gestionar Usuarios</button>
+                <button className="btn"> Reservas</button>
+                <button className="btn"> Usuarios</button>
                 <button className="btn" onClick={toggleSubMenuComponent}>
-                    Gestionar Habitaciones
+                     Habitaciones
                 </button>
             </div>
                 {showSubMenu && <SubMenu />}
