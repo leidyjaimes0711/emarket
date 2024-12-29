@@ -6,7 +6,6 @@ const LoginPanel = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const history = useNavigate();
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -20,10 +19,6 @@ const LoginPanel = () => {
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const goToSection = (section) => {
-        history.push(`/loginPanel/${section}`);
-    };
 
     const handleSubmit = (event) => {
         event.preventDefault();

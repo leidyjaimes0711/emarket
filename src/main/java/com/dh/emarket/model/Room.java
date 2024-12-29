@@ -71,8 +71,6 @@ public class Room {
         this.images.add(image);
     }
 
-    public void removeImage(Image image) {
-        images.remove(image);
-    }
+
 
 }

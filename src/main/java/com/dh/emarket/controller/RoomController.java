@@ -52,6 +52,12 @@ public class RoomController {
         List<Room> rooms = roomRepository.findAll();
         return ResponseEntity.ok(rooms);
     }
+    // endpoint para mostrar el total de habitaciones ____________________________________
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalRooms() {
+        long totalRooms = roomRepository.count();
+        return ResponseEntity.ok(totalRooms);
+    }
 
     // endpoint para mostrar 1 habitacion por id ____________________________________
 
@@ -62,6 +68,7 @@ public class RoomController {
             super(message);
         }
     }
+
     @GetMapping("/{roomId}")
     public ResponseEntity<Room> getRoomById(@PathVariable Long roomId) {
         Room room = roomService.findById(roomId)
@@ -99,7 +106,7 @@ public class RoomController {
         roomService.save(room);
         System.out.println(room);
 
-        return ResponseEntity.ok("Imágenes subidas con éxito." );
+        return ResponseEntity.ok("Imágenes subidas con éxito.");
     }
 
 
@@ -173,7 +180,8 @@ public class RoomController {
     public ResponseEntity<?> updateRoom(
             @PathVariable Long id,
             @RequestPart("room") String roomJson,  // El JSON de la habitación en forma de String
-            @RequestPart(value = "images", required = false) MultipartFile[] images  // Las nuevas imágenes (opcional)
+            @RequestPart(value = "images", required = false) MultipartFile[] images,  // Las nuevas imágenes (opcional)
+            @RequestPart(value = "imageIdsToDelete", required = false) List<Long> imageIdsToDelete  // IDs de las imágenes a eliminar (opcional)
     ) {
         ObjectMapper objectMapper = new ObjectMapper();
         Room room;
@@ -187,12 +195,20 @@ public class RoomController {
 
         // Intentamos actualizar la habitación
         try {
-            Room updatedRoom = roomService.update(id, room); // Usamos el método de actualización
+            Room existingRoom = roomService.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Habitación no encontrada"));
+
+            // Actualizamos los datos básicos de la habitación con los datos del JSON
+            existingRoom.setName(room.getName());
+            existingRoom.setDescription(room.getDescription());
+
 
             // Si se reciben nuevas imágenes, las procesamos
             if (images != null && images.length > 0) {
-                processImages(images, updatedRoom);  // Extraemos la lógica de imágenes a un método separado
+                processImages(images, existingRoom);  // Extraemos la lógica de imágenes a un método separado
             }
+
+            Room updatedRoom = roomService.save(existingRoom);  // Guardamos los cambios en la habitación
 
             return ResponseEntity.ok(updatedRoom);  // Devolvemos la habitación actualizada
         } catch (EntityNotFoundException e) {
@@ -211,10 +227,18 @@ public class RoomController {
             newImage.setData(image.getBytes());
             room.addImage(newImage);  // Agregamos la nueva imagen
         }
-        roomService.save(room);  // Guardamos las imágenes en la habitación
     }
 
 
-
+    // Endpoint para eliminar una imagen de una habitacion ____________________________________________
+    @DeleteMapping("/{roomId}/images/{imageId}")
+    public ResponseEntity<String> deleteImageFromRoom(@PathVariable Long roomId, @PathVariable Long imageId) {
+        boolean deleted = roomService.deleteImageFromRoom(roomId, imageId);
+        if (deleted) {
+            return ResponseEntity.ok("Image deleted successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

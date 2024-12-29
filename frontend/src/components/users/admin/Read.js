@@ -5,8 +5,9 @@ const Read = () => {
     const [error, setError] = useState('');
     const [rooms, setRooms] = useState([]);
     const [editingRoom, setEditingRoom] = useState(null);
-    const [originalName, setOriginalName] = useState(''); // Guardamos el nombre original
+    const [originalName, setOriginalName] = useState('');
     const [newImages, setNewImages] = useState([]);
+    const [existingImages, setExistingImages] = useState([]);
 
     const listRooms = async () => {
         try {
@@ -27,7 +28,6 @@ const Read = () => {
 
     const deleteRoom = async (roomId) => {
         const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta habitación?');
-
         if (confirmDelete) {
             try {
                 const response = await fetch(`http://localhost:8080/api/rooms/${roomId}`, {
@@ -47,22 +47,32 @@ const Read = () => {
 
     const handleEdit = (room) => {
         setEditingRoom(room);
-        setOriginalName(room.name); // Guardamos el nombre original cuando iniciamos la edición
-        setNewImages([]); // Limpia las nuevas imágenes
+        setOriginalName(room.name);
+        setNewImages([]);
+        setExistingImages(room.images || []); // Almacena las imágenes existentes
     };
 
     const handleImageChange = (e) => {
-        setNewImages([...e.target.files]); // Guardar las nuevas imágenes seleccionadas
+        setNewImages([...e.target.files]);
+    };
+
+    const handleDeleteExistingImage = (index) => {
+        const updatedImages = existingImages.filter((_, imgIndex) => imgIndex !== index);
+        setExistingImages(updatedImages); // Elimina la imagen seleccionada del estado de imágenes existentes
     };
 
     const saveEditRoom = async (room) => {
         const formData = new FormData();
 
+        // Agrega imágenes nuevas al FormData
         if (newImages.length > 0) {
             newImages.forEach((image) => {
                 formData.append('images', image);
             });
         }
+
+        // Agrega las imágenes existentes (las que quedan después de la eliminación)
+        formData.append('existingImages', JSON.stringify(existingImages.map(img => img.id)));
 
         const updatedRoom = {
             ...room,
@@ -101,67 +111,86 @@ const Read = () => {
             {rooms.length === 0 ? (
                 <p>No hay habitaciones disponibles</p>
             ) : (
-                <ul>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {rooms.map((room) => (
-                        <li key={room.id}>
-                            <h3>{room.name}</h3>
-                            <p>{room.description}</p>
-                            {room.images && room.images.length > 0 ? (
-                                room.images.map((image, index) => (
+                        <tr key={room.id}>
+                            <td>{room.id}</td>
+                            <td>{room.name}</td>
+                            <td>
+                                <button onClick={() => handleEdit(room)}>Editar</button>
+                                <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
+
+            {editingRoom && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <button className="modal-close" onClick={() => setEditingRoom(null)}>&times;</button>
+                        <h3>Editando Habitación: {originalName}</h3>
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            saveEditRoom(editingRoom);
+                        }}>
+                            <label>Nombre:
+                                <input
+                                    placeholder="Nombre"
+                                    type="text"
+                                    value={editingRoom.name || ""}
+                                    onChange={(e) => setEditingRoom({...editingRoom, name: e.target.value})}
+                                />
+                            </label>
+                            <label>Descripción:
+                                <input
+                                    type="text"
+                                    value={editingRoom.description || ""}
+                                    onChange={(e) => setEditingRoom({...editingRoom, description: e.target.value})}
+                                />
+                            </label>
+
+                            <h4>Imágenes existentes:</h4>
+                            {existingImages.length > 0 ? (
+                                existingImages.map((image, index) => (
                                     <div key={index}>
                                         <img
                                             src={`data:image/jpeg;base64,${image.data}`}
-                                            alt={`Imagen de la habitación ${index + 1}`}
-                                            width="200px"
-                                            height="150px"
+                                            alt={`Imagen ${index + 1}`}
+                                            width="100px"
+                                            height="80px"
                                         />
+                                        <button type="button" onClick={() => handleDeleteExistingImage(index)}>
+                                            Eliminar
+                                        </button>
                                     </div>
                                 ))
                             ) : (
                                 <p>No hay imágenes disponibles</p>
                             )}
-                            <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
-                        </li>
-                    ))}
-                </ul>
-            )}
 
-            {editingRoom && (
-                <div className="edit-form">
-                    {/* Usa el nombre original de `editingRoom` en el título sin que cambie */}
-                    <h3>Editando Habitación: {originalName}</h3>
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        saveEditRoom(editingRoom);
-                    }}>
-                        <label>Nombre:
-                            <input
-                                placeholder="Nombre"
-                                type="text"
-                                value={editingRoom.name || ""}
-                                onChange={(e) => setEditingRoom({...editingRoom, name: e.target.value})}
-                            />
-                        </label>
-                        <label>Descripción:
-                            <input
-                                type="text"
-                                value={editingRoom.description || ""}
-                                onChange={(e) => setEditingRoom({...editingRoom, description: e.target.value})}
-                            />
-                        </label>
+                            <label>Agregar nuevas imágenes:
+                                <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                />
+                            </label>
 
-                        <label>Agregar imágenes:
-                            <input
-                                type="file"
-                                multiple
-                                accept="image/*"
-                                onChange={handleImageChange}
-                            />
-                        </label>
-
-                        <button type="submit">Guardar habitación</button>
-                        <button type="button" onClick={() => setEditingRoom(null)}>Cancelar</button>
-                    </form>
+                            <button type="submit">Guardar habitación</button>
+                            <button type="button" onClick={() => setEditingRoom(null)}>Cancelar</button>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>

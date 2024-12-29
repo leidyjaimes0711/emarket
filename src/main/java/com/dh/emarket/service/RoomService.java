@@ -1,10 +1,10 @@
 package com.dh.emarket.service;
 
-import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
 import com.dh.emarket.repository.RoomRepository;
 import com.dh.emarket.repository.ImageRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class RoomService {
             // Actualizamos los datos de la habitación con los nuevos detalles
             room.setName(roomDetails.getName());
             room.setDescription(roomDetails.getDescription());
-            // Si tu entidad tiene más atributos, también debes actualizarlos aquí
+            room.setImages(roomDetails.getImages());
             return roomRepository.save(room);
         }).orElseThrow(() -> new EntityNotFoundException("Room with id " + id + " not found"));
     }
@@ -60,30 +60,17 @@ public class RoomService {
 
 
     //método para eliminar una imagen existente de una habitación existente
+    @Transactional
+    public boolean deleteImageFromRoom(Long roomId, Long imageId) {
+        Room room = roomRepository.findById(roomId).orElse(null);
 
-    public void deleteRoomImage(Long roomId, Long imageId) throws Exception {
-        // Buscar la habitación por su ID
-        Optional<Room> roomOptional = roomRepository.findById(roomId);
-        if (roomOptional.isPresent()) {
-            Room room = roomOptional.get();
-
-            // Buscar la imagen en la lista de imágenes de la habitación
-            Image imageToRemove = room.getImages().stream()
-                    .filter(image -> image.getId().equals(imageId))
-                    .findFirst()
-                    .orElseThrow(() -> new Exception("Imagen no encontrada"));
-
-            // Remover la imagen de la lista
-            room.getImages().remove(imageToRemove);
-
-            // Guardar los cambios en la base de datos
+        if (room != null) {
+            room.getImages().removeIf(image -> image.getId().equals(imageId));
             roomRepository.save(room);
-
-            // Eliminar la imagen de la base de datos si es necesario
-            imageRepository.deleteById(imageId);
-        } else {
-            throw new Exception("Habitación no encontrada");
+            return true;
         }
+
+        return false;
     }
 
 }

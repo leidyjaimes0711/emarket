@@ -17,13 +17,13 @@ function Home() {
                 <Header /> {/* El header se mostrará en todas las páginas */}
                 <Routes>
                     <Route path="/" element={<Body />} />
-                    <Route path="/adminMenu" element={<Menu />} />
                     <Route path="/addRoom" element={<Create />} />
                     <Route path="/loginPanel" element={<LoginPanel />} />
+                    <Route path="/adminMenu" element={<Menu />} />
                     <Route path="/" element={<RecommendationsSection />} />
                     <Route path="/room/:id" element={<RoomDetail />} />
                 </Routes>
-                <Footer />
+                <Footer />{/* El footer se mostrará en todas las páginas */}
             </div>
         </Router>
     );
