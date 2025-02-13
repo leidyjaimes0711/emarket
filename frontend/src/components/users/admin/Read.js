@@ -103,6 +103,7 @@ const Read = () => {
         listRooms();
     }, []);
 
+    //EN EL FRONTEND SE MOSTRARÁ LO SIGUIENTE
     return (
         <div>
             <h2>Lista de Habitaciones</h2>
