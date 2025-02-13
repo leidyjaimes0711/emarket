@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import '../../../styles/Create.css';
-
+//CREA UNA HABITACIÓN
 const Create = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');

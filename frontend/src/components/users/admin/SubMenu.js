@@ -23,7 +23,7 @@ const SubMenu = () => {
                     Crear habitación
                 </button>
                 <button className="btn" onClick={() => showComponent('list')}>
-                    Mostrar todas
+                    Listar todas
                 </button>
 
             </div>
