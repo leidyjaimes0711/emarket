@@ -8,7 +8,7 @@ const Create = () => {
     const [previewImages, setPreviewImages] = useState([]);
     const [error, setError] = useState('');
     const fileInputRef = useRef(null);
-
+    const [categories, setCategories] = useState('');
     const handleImageChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));
@@ -20,7 +20,7 @@ const Create = () => {
         e.preventDefault();
 
         // Validación del formulario
-        if (!name || !description) {
+        if (!name || !description || !categories) {
             setError('Todos los campos son obligatorios');
             return;
         }
@@ -30,10 +30,15 @@ const Create = () => {
             return;
         }
 
+        // Convertir las categorías a un array
+        const categoriesArray = categories.split(',').map(cat => cat.trim());
+
+
         // Crear el FormData
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
+        formData.append('categories', JSON.stringify(categoriesArray));
         images.forEach((image) => formData.append('images', image));
 
         try {
@@ -60,6 +65,7 @@ const Create = () => {
         setDescription('');
         setImages([]);
         setPreviewImages([]);
+        setCategories('');
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
@@ -132,6 +138,24 @@ const Create = () => {
                         height="150px"
                     />
                 ))}
+            </div>
+
+            <label>Categorías:
+                <input
+                    type="text"
+                    placeholder="Escribe las categorías separadas por comas"
+                    value={categories}
+                    onChange={(e) => setCategories(e.target.value)}
+                />
+            </label>
+
+            <div>
+                <p>Categorías ingresadas:</p>
+                <ul>
+                    {categories.split(',').map((cat, index) => (
+                        <li key={index}>{cat.trim()}</li>
+                    ))}
+                </ul>
             </div>
 
             <button type="submit">Agregar habitación</button>

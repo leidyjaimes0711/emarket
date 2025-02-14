@@ -20,7 +20,7 @@ public class RoomService {
     private ImageRepository imageRepository;
 
 
-    // Guardar o actualizar una habitación
+    // Método Guardar o actualizar una habitación
     public Room save(Room room) {
         Optional<Room> existingRoom = roomRepository.findByName(room.getName());
         if (existingRoom.isPresent() && !existingRoom.get().getId().equals(room.getId())) {
@@ -29,7 +29,7 @@ public class RoomService {
         return roomRepository.save(room);
     }
 
-    // Eliminar una habitación por ID
+    // Método Eliminar una habitación por ID
     public boolean delete(Long id){
         roomRepository.deleteById(id);  // Eliminar por ID
         return true;
@@ -48,12 +48,12 @@ public class RoomService {
 
 
 
-    // Listar todas las habitaciones
+    // Método Listar todas las habitaciones
     public List<Room> findAll(){
         return roomRepository.findAll();  // Obtener todas
     }
 
-    // Encontrar habitación por ID
+    // Método Encontrar habitación por ID
     public Optional<Room> findById(Long id) {
         return roomRepository.findById(id);  // Buscar por ID
     }

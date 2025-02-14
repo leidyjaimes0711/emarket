@@ -1,9 +1,6 @@
 package com.dh.emarket.model;
-
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,22 +16,14 @@ public class Room {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "room_id")  // Esto asegura que la columna room_id esté en la tabla de imágenes
-    //@JsonManagedReference
     private List<Image> images = new ArrayList<>();
 
-    //constructores
-    public Room(Long id, String name, String description, List<Image> images) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.images = images;
-    }
-
+    // Constructores
     public Room() {
-
     }
 
     // Getters y Setters
+
     public Long getId() {
         return id;
     }
@@ -59,6 +48,8 @@ public class Room {
         this.description = description;
     }
 
+
+
     public List<Image> getImages() {
         return images;
     }
@@ -68,9 +59,5 @@ public class Room {
     }
 
     public void addImage(Image image) {
-        this.images.add(image);
     }
-
-
-
 }

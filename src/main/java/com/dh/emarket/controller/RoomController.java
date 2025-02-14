@@ -21,6 +21,9 @@ import java.util.Optional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sun.beans.introspect.PropertyInfo.Name.description;
+
 @CrossOrigin(origins = "http://localhost:3000")
 
 @RestController
@@ -116,11 +119,12 @@ public class RoomController {
         return imageService.getImagesByRoom(roomId);
     }
 
-    // Endpoint para agregar una nueva habitación
+    // Endpoint para crear una habitación
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestParam("name") String name,
                                         @RequestParam("description") String description,
-                                        @RequestParam("images") List<MultipartFile> images) {
+                                        @RequestParam("images") List<MultipartFile> images)
+    {
         // Verificar si el nombre ya existe en la base de datos
         Optional<Room> existingRoom = roomRepository.findByName(name);
         if (existingRoom.isPresent()) {
@@ -130,8 +134,7 @@ public class RoomController {
         // Crear una nueva instancia de Room y establecer sus atributos
         Room room = new Room();
         room.setName(name);
-        room.setDescription(description);
-
+        room.setDescription(String.valueOf(description));
         // Procesar y guardar las imágenes
         List<Image> imageList = new ArrayList<>();
         for (MultipartFile file : images) {
@@ -148,6 +151,10 @@ public class RoomController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar las imágenes");
             }
         }
+
+
+
+
 
         // Establecer las imágenes en la habitación
         room.setImages(imageList);
