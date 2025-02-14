@@ -8,7 +8,7 @@ const Create = () => {
     const [previewImages, setPreviewImages] = useState([]);
     const [error, setError] = useState('');
     const fileInputRef = useRef(null);
-    const [categories, setCategories] = useState('');
+    const [categories, setCategories] = useState([]);
     const handleImageChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         const previewURLs = selectedFiles.map((file) => URL.createObjectURL(file));

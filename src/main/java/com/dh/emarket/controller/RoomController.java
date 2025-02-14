@@ -210,48 +210,56 @@ public class RoomController {
     }
 
 
-    // Endpoint para actualizar una habitación por ID___________________________________
+    // Endpoint para actualizar una habitación por ID
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateRoom(
             @PathVariable Long id,
-            @RequestPart("room") String roomJson,  // El JSON de la habitación en forma de String
-            @RequestPart(value = "images", required = false) MultipartFile[] images,  // Las nuevas imágenes (opcional)
-            @RequestPart(value = "imageIdsToDelete", required = false) List<Long> imageIdsToDelete  // IDs de las imágenes a eliminar (opcional)
+            @RequestPart("room") String roomJson,  // El JSON de la habitación
+            @RequestPart(value = "images", required = false) MultipartFile[] images,  // Nuevas imágenes
+            @RequestPart(value = "imageIdsToDelete", required = false) List<Long> imageIdsToDelete  // IDs de imágenes a eliminar
     ) {
         ObjectMapper objectMapper = new ObjectMapper();
         Room room;
 
         try {
-            // Convertimos el JSON recibido de la habitación a un objeto
+            // Convertir el JSON recibido en un objeto Room
             room = objectMapper.readValue(roomJson, Room.class);
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().body("Error al procesar JSON de la habitación");
         }
 
-        // Intentamos actualizar la habitación
         try {
             Room existingRoom = roomService.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Habitación no encontrada"));
 
-            // Actualizamos los datos básicos de la habitación con los datos del JSON
+            // Actualizar datos básicos de la habitación
             existingRoom.setName(room.getName());
             existingRoom.setDescription(room.getDescription());
 
+            // Actualizar categorías (asumiendo que `categories` es una lista en la entidad Room)
+            existingRoom.setCategories(room.getCategories());
 
-            // Si se reciben nuevas imágenes, las procesamos
+            // Manejar imágenes
             if (images != null && images.length > 0) {
-                processImages(images, existingRoom);  // Extraemos la lógica de imágenes a un método separado
+                processImages(images, existingRoom);
             }
 
-            Room updatedRoom = roomService.save(existingRoom);  // Guardamos los cambios en la habitación
+            // Eliminar imágenes si se proporcionan los IDs
+            if (imageIdsToDelete != null && !imageIdsToDelete.isEmpty()) {
+                existingRoom.getImages().removeIf(img -> imageIdsToDelete.contains(img.getId()));
+            }
 
-            return ResponseEntity.ok(updatedRoom);  // Devolvemos la habitación actualizada
+            // Guardar la habitación actualizada
+            Room updatedRoom = roomService.save(existingRoom);
+
+            return ResponseEntity.ok(updatedRoom);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar las imágenes");
         }
     }
+
 
     // Método para procesar y agregar imágenes a la habitación
     private void processImages(MultipartFile[] images, Room room) throws IOException {

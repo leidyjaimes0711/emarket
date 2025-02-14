@@ -8,8 +8,7 @@ const Read = () => {
     const [originalName, setOriginalName] = useState('');
     const [newImages, setNewImages] = useState([]);
     const [existingImages, setExistingImages] = useState([]);
-    const [selectedCategories, setSelectedCategories] = useState([]);
-    const [availableCategories, setAvailableCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
 
 
     //lista todas las habitaciones
@@ -86,14 +85,23 @@ const Read = () => {
         // Agrega las imágenes existentes (las que quedan después de la eliminación)
         formData.append('existingImages', JSON.stringify(existingImages.map(img => img.id)));
 
+        // Verifica que las categorías existan y sean un array antes de procesarlas
+        const categories = editingRoom.categories || [];
 
+        // Formatea las categorías según su estructura (suponiendo que tienen una propiedad 'name')
+        const formattedCategories = categories.map(category => ({
+            name: category.name // Ajusta esto si `category` tiene otra estructura
+        }));
+
+        // Actualiza la habitación con los nuevos datos
         const updatedRoom = {
             ...room,
             name: editingRoom.name,
             description: editingRoom.description,
-            categories: selectedCategories
+            categories: formattedCategories // Usa las categorías formateadas
         };
 
+        // Agrega los datos de la habitación al FormData
         formData.append('room', JSON.stringify(updatedRoom));
 
         try {
@@ -101,6 +109,7 @@ const Read = () => {
                 method: 'PUT',
                 body: formData
             });
+
             if (response.ok) {
                 listRooms();
                 setEditingRoom(null);
@@ -119,6 +128,7 @@ const Read = () => {
 
     //EN EL FRONTEND SE MOSTRARÁ LO SIGUIENTE
     return (
+
         <div>
             <h2>Lista de Habitaciones</h2>
             {error && <p>{error}</p>}
@@ -132,7 +142,6 @@ const Read = () => {
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>Acciones</th>
-                        <th>Categorias</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -144,6 +153,7 @@ const Read = () => {
                                 <button onClick={() => handleEdit(room)}>Editar</button>
                                 <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
                             </td>
+
                         </tr>
 
                     ))}
@@ -176,22 +186,20 @@ const Read = () => {
                                 />
                             </label>
 
-                            {/* Selección de categorías */}
-                            <label>Categorías:</label>
-                            <select
-                                multiple
-                                value={selectedCategories}
-                                onChange={(e) => {
-                                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-                                    setSelectedCategories(selectedOptions); // Necesitas definir setSelectedCategories en tu estado
-                                }}
-                            >
-                                {availableCategories.map((category) => (
-                                    <option key={category.id} value={category.name}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                            </select>
+
+
+                            <div>
+                                <p>Categorías:</p>
+                                <ul>
+                                    {editingRoom.categories && editingRoom.categories.length > 0 ? (
+                                        editingRoom.categories.map((category, index) => (
+                                            <li key={index}>{category.name}</li>
+                                        ))
+                                    ) : (
+                                        <p>No hay categorías disponibles</p>
+                                    )}
+                                </ul>
+                            </div>
 
                             <h4>Imágenes existentes:</h4>
                             {existingImages.length > 0 ? (
