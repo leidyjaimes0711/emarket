@@ -38,7 +38,7 @@ const Create = () => {
         const formData = new FormData();
         formData.append('name', name);
         formData.append('description', description);
-        formData.append('categories', JSON.stringify(categoriesArray));
+        formData.append('categories', categoriesArray);
         images.forEach((image) => formData.append('images', image));
 
         try {

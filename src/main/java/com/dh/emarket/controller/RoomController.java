@@ -164,23 +164,27 @@ public class RoomController {
         // Asociar categorías a la habitación
         List<Category> categories = new ArrayList<>();
         for (String categoryName : categoryNames) {
-            Optional<Category> category = categoryRepository.findByName(categoryName);
-            if (category.isPresent()) {
-                categories.add(category.get());
-            } else {
-                // Si la categoría no se encuentra, crear una nueva categoría
-                Category newCategory = new Category();
-                newCategory.setName(categoryName);
-                try {
-                    // Guardar la nueva categoría en la base de datos
-                    Category savedCategory = categoryRepository.save(newCategory);
-                    categories.add(savedCategory);
-                } catch (Exception e) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la categoría: " + categoryName);
+            if (categoryName != null && !categoryName.trim().isEmpty()) { // Validar el nombre
+                categoryName = categoryName.trim(); // Eliminar espacios en blanco
+                Optional<Category> category = categoryRepository.findByName(categoryName);
+
+                if (category.isPresent()) {
+                    categories.add(category.get());
+                } else {
+                    // Crear nueva categoría si no existe
+                    Category newCategory = new Category();
+                    newCategory.setName(categoryName);
+                    try {
+                        Category savedCategory = categoryRepository.save(newCategory); // Guardar en la BD
+                        categories.add(savedCategory); // Agregar la categoría guardada a la lista
+                    } catch (Exception e) {
+                        // Manejo de errores si ocurre un problema al guardar la categoría
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Error al crear la categoría: " + categoryName);
+                    }
                 }
             }
         }
-
         room.setCategories(categories);
 
         // Guardar la habitación en la base de datos
