@@ -1,8 +1,10 @@
 package com.dh.emarket.controller;
 
 import com.dh.emarket.dto.ImageDTO;
+import com.dh.emarket.model.Category;
 import com.dh.emarket.model.Image;
 import com.dh.emarket.model.Room;
+import com.dh.emarket.repository.CategoryRepository;
 import com.dh.emarket.repository.RoomRepository;
 import com.dh.emarket.service.ImageService;
 import com.dh.emarket.service.RoomService;
@@ -22,7 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.beans.introspect.PropertyInfo.Name.description;
 
 @CrossOrigin(origins = "http://localhost:3000")
 
@@ -39,6 +40,8 @@ public class RoomController {
 
     @Autowired
     private RoomService roomService;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
 
     //constructor____________________________________________
@@ -123,7 +126,9 @@ public class RoomController {
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestParam("name") String name,
                                         @RequestParam("description") String description,
-                                        @RequestParam("images") List<MultipartFile> images)
+                                        @RequestParam("images") List<MultipartFile> images,
+                                        @RequestParam("categories") List<String> categoryNames)
+
     {
         // Verificar si el nombre ya existe en la base de datos
         Optional<Room> existingRoom = roomRepository.findByName(name);
@@ -135,6 +140,7 @@ public class RoomController {
         Room room = new Room();
         room.setName(name);
         room.setDescription(String.valueOf(description));
+
         // Procesar y guardar las imágenes
         List<Image> imageList = new ArrayList<>();
         for (MultipartFile file : images) {
@@ -152,12 +158,30 @@ public class RoomController {
             }
         }
 
-
-
-
-
         // Establecer las imágenes en la habitación
         room.setImages(imageList);
+
+        // Asociar categorías a la habitación
+        List<Category> categories = new ArrayList<>();
+        for (String categoryName : categoryNames) {
+            Optional<Category> category = categoryRepository.findByName(categoryName);
+            if (category.isPresent()) {
+                categories.add(category.get());
+            } else {
+                // Si la categoría no se encuentra, crear una nueva categoría
+                Category newCategory = new Category();
+                newCategory.setName(categoryName);
+                try {
+                    // Guardar la nueva categoría en la base de datos
+                    Category savedCategory = categoryRepository.save(newCategory);
+                    categories.add(savedCategory);
+                } catch (Exception e) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear la categoría: " + categoryName);
+                }
+            }
+        }
+
+        room.setCategories(categories);
 
         // Guardar la habitación en la base de datos
         try {

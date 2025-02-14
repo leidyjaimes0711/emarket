@@ -1,6 +1,14 @@
 package com.dh.emarket.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
 @Entity
 public class Category {
 
@@ -11,6 +19,8 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @ManyToMany(mappedBy = "categories")
+    private List<Room> rooms = new ArrayList<>();
 
 
     //constructor
@@ -24,7 +34,6 @@ public class Category {
 
 
     //getters y setters
-
 
     public Long getId() {
         return id;
