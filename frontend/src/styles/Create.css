@@ -1,6 +1,6 @@
 /* Estilos generales para el formulario */
 form {
-    background-color: #f9f9f9;
+    background-color: rgba(128, 128, 128, 0.3);
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

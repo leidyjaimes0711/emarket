@@ -8,7 +8,11 @@ const Read = () => {
     const [originalName, setOriginalName] = useState('');
     const [newImages, setNewImages] = useState([]);
     const [existingImages, setExistingImages] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [availableCategories, setAvailableCategories] = useState([]);
 
+
+    //lista todas las habitaciones
     const listRooms = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/rooms', {
@@ -26,6 +30,8 @@ const Read = () => {
         }
     };
 
+
+    //borra una habitacion
     const deleteRoom = async (roomId) => {
         const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta habitación?');
         if (confirmDelete) {
@@ -52,15 +58,21 @@ const Read = () => {
         setExistingImages(room.images || []); // Almacena las imágenes existentes
     };
 
+
+    //edita una imagen existente
     const handleImageChange = (e) => {
         setNewImages([...e.target.files]);
     };
 
+
+    //borra una imagen existente
     const handleDeleteExistingImage = (index) => {
         const updatedImages = existingImages.filter((_, imgIndex) => imgIndex !== index);
         setExistingImages(updatedImages); // Elimina la imagen seleccionada del estado de imágenes existentes
     };
 
+
+    //edita una habitacion existente
     const saveEditRoom = async (room) => {
         const formData = new FormData();
 
@@ -74,10 +86,12 @@ const Read = () => {
         // Agrega las imágenes existentes (las que quedan después de la eliminación)
         formData.append('existingImages', JSON.stringify(existingImages.map(img => img.id)));
 
+
         const updatedRoom = {
             ...room,
             name: editingRoom.name,
             description: editingRoom.description,
+            categories: selectedCategories
         };
 
         formData.append('room', JSON.stringify(updatedRoom));
@@ -118,6 +132,7 @@ const Read = () => {
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>Acciones</th>
+                        <th>Categorias</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -130,6 +145,7 @@ const Read = () => {
                                 <button onClick={() => deleteRoom(room.id)}>Eliminar</button>
                             </td>
                         </tr>
+
                     ))}
                     </tbody>
                 </table>
@@ -159,6 +175,23 @@ const Read = () => {
                                     onChange={(e) => setEditingRoom({...editingRoom, description: e.target.value})}
                                 />
                             </label>
+
+                            {/* Selección de categorías */}
+                            <label>Categorías:</label>
+                            <select
+                                multiple
+                                value={selectedCategories}
+                                onChange={(e) => {
+                                    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+                                    setSelectedCategories(selectedOptions); // Necesitas definir setSelectedCategories en tu estado
+                                }}
+                            >
+                                {availableCategories.map((category) => (
+                                    <option key={category.id} value={category.name}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
 
                             <h4>Imágenes existentes:</h4>
                             {existingImages.length > 0 ? (

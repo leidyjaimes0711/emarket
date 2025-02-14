@@ -156,7 +156,7 @@ button:hover {
 
 /* Estilos para el contenedor del modal */
 .modal-content {
-    background: #fff;
+    background:grey;
     padding: 20px;
     border-radius: 8px;
     width: 90%;
