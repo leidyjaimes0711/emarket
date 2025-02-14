@@ -152,11 +152,13 @@ const Create = () => {
             <div>
                 <p>Categorías ingresadas:</p>
                 <ul>
-                    {categories.split(',').map((cat, index) => (
-                        <li key={index}>{cat.trim()}</li>
-                    ))}
+                    {Array.isArray(categories) &&
+                        categories.map((cat, index) => (
+                            <li key={index}>{cat.trim()}</li>
+                        ))}
                 </ul>
             </div>
+
 
             <button type="submit">Agregar habitación</button>
         </form>
