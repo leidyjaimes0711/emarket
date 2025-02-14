@@ -1,6 +1,8 @@
 package com.dh.emarket.service;
 
+import com.dh.emarket.model.Category;
 import com.dh.emarket.model.Room;
+import com.dh.emarket.repository.CategoryRepository;
 import com.dh.emarket.repository.RoomRepository;
 import com.dh.emarket.repository.ImageRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
@@ -18,6 +21,15 @@ public class RoomService {
     private RoomRepository roomRepository;
     @Autowired
     private ImageRepository imageRepository;
+    private final CategoryRepository categoryRepository;
+
+
+    // Constructor para inyección de dependencias
+    @Autowired
+    public RoomService(RoomRepository roomRepository, CategoryRepository categoryRepository) {
+        this.roomRepository = roomRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
 
     // Método Guardar o actualizar una habitación
@@ -72,5 +84,21 @@ public class RoomService {
 
         return false;
     }
+
+    // Método para guardar una habitación con categorías
+    public Room saveRoomWithCategories(Room room, List<String> categoryNames) {
+        // Obtener las categorías por sus nombres
+        List<Category> categories = categoryNames.stream()
+                .map(name -> categoryRepository.findByName(name)
+                        .orElseThrow(() -> new RuntimeException("Category not found: " + name)))
+                .collect(Collectors.toList());
+
+        // Asignar las categorías a la habitación
+        room.setCategories(categories);
+
+        // Guardar la habitación en la base de datos
+        return roomRepository.save(room);
+    }
+
 
 }

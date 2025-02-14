@@ -18,6 +18,16 @@ public class Room {
     @JoinColumn(name = "room_id")  // Esto asegura que la columna room_id esté en la tabla de imágenes
     private List<Image> images = new ArrayList<>();
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "room_category",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
+
+
     // Constructores
     public Room() {
     }
@@ -59,5 +69,13 @@ public class Room {
     }
 
     public void addImage(Image image) {
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }
